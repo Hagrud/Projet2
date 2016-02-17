@@ -13,8 +13,6 @@ vector<bool> dpll(vector<vector<int>> clauses, int nV){
 
 	dpll_rec(clauses, varsStates, nV, 0);
 
-	//varsStates[i];
-	//varsStates.push_back(k);
 	return varsStates;
 }
 
@@ -39,16 +37,17 @@ bool dpll_rec(vector<vector<int>>& clauses, vector<bool>& varsStates, int nV, in
 }
 
 bool check(vector<vector<int>>& clauses, vector<bool>& varsStates){
+
+    for(auto b:varsStates){
+        cout << b << " ";
+    }
+    cout << endl;
 	for(auto vec:clauses){
 
-        for(auto b:vec){
-            cout << b << " ";
-        }
-        cout << endl;
+
 
 		bool state = false;
 		for(auto var: vec){
-            cout << var << endl;
 			if(var<0){
 				if(!varsStates[-var-1]){
 					state = true;
@@ -72,6 +71,7 @@ int main(){
 	vector<vector<int>> clauses = parse("test.cnf");
 	vector<bool> rep = dpll(clauses, 3);
 
+    cout << "END CHECK !" << endl;
 	for(vector<int> clause:clauses){
         for(auto b:clause){
             cout << b << " ";
