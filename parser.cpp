@@ -2,17 +2,17 @@
 
 using namespace std;
 
-vector< vector<int> > parse(const char* path)
+pair<vector<vector<int>>,int> parse(const char* path)
 {
     vector< vector<int> > vars;
-    int V, C, val;
+    unsigned int V, C, val, Vmax = 0;
     string tmp;
     ifstream file(path);
 
     if(!file)
     {
 	cout << "File " << path << " not found." << endl;
-	return vars;
+	return make_pair(vars, 0);
     }
 
     string line;
@@ -20,31 +20,34 @@ vector< vector<int> > parse(const char* path)
     do {
 	getline(file, line);
     } while(line[0] == 'c');
-    
+
     istringstream iss(line);
     iss >> tmp >> tmp >> V >> C;
 
-    vars.resize(C);
-    
-    for(int i = 0; i < C; i++)
-    {
-	vars[i].resize(0);
-	getline(file, line);
+    vars.resize(0);
 
+    while(getline(file, line))
+    {
+    vars.push_back({});
 	if(line[0] == 'c')
 	{
-	    i--;
 	    continue;
 	}
-	
+
 	istringstream iss(line);
 
 	while(iss >> val && val != 0)
 	{
-	    vars[i].push_back(val);
+	    vars.back().push_back(val);
+	    Vmax = max(Vmax,val);
 	}
     }
 
-    return vars;
+    if(C!=vars.size())
+        cout << "Le fichier contient " << vars.size() << " clause(s) alors que " << C << " clause(s) étaient annoncées." << endl;
+    if(V!=Vmax)
+        cout << "Le fichier contient " << Vmax << " variable(s) alors que " << V << " variable(s) étaient annoncées." << endl;
+
+    return make_pair(vars, Vmax);
 }
 

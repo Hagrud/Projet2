@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+
 using namespace std;
 
-vector< vector<int> > parse(const char* path);
+pair<vector< vector<int> >, int> parse(const char* path);

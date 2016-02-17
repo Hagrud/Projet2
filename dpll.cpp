@@ -1,12 +1,5 @@
-#include <vector>
-#include <iostream>
+#include "dpll.h"
 #include "parser.h"
-
-using namespace std;
-
-bool dpll_rec(vector<vector<int>>& clauses, vector<bool>& varsStates, int nV, int pos);
-bool check(vector<vector<int>>& clauses, vector<bool>& varsStates);
-vector<bool> dpll(vector<vector<int>> clauses, int nV);
 
 vector<bool> dpll(vector<vector<int>> clauses, int nV){
 	vector<bool> varsStates(nV, true);
@@ -20,31 +13,33 @@ bool dpll_rec(vector<vector<int>>& clauses, vector<bool>& varsStates, int nV, in
 
 	if(check(clauses, varsStates)){return true;}
 
-	if(pos<nV-1){
-		bool val = dpll_rec(clauses, varsStates, nV, pos+1);
+    if(pos<nV){
+        bool val = dpll_rec(clauses, varsStates, nV, pos+1);
 		if(val){return true;}
 
-		if(varsStates[pos]){
-			varsStates[pos] = false;
-			dpll_rec(clauses, varsStates, nV, pos);
-		}
-		else{
-			varsStates[pos] = true;
-			return false;
-		}
-	}
+		varsStates[pos] = !varsStates[pos];
+        val = dpll_rec(clauses, varsStates, nV, pos+1);
+        if(val)
+            return true;
+        else{
+            varsStates[pos] = true;
+            return false;
+        }
+    }
+    else{
+        varsStates[pos] = !varsStates[pos];
+        if(check(clauses, varsStates))
+            return true;
+        else{
+            varsStates[pos] = true;
+            return false;
+        }
+    }
 	return false;
 }
 
 bool check(vector<vector<int>>& clauses, vector<bool>& varsStates){
-
-    for(auto b:varsStates){
-        cout << b << " ";
-    }
-    cout << endl;
 	for(auto vec:clauses){
-
-
 
 		bool state = false;
 		for(auto var: vec){
@@ -67,26 +62,35 @@ bool check(vector<vector<int>>& clauses, vector<bool>& varsStates){
 
 }
 
-int main(){
-	vector<vector<int>> clauses = parse("test.cnf");
-	vector<bool> rep = dpll(clauses, 3);
+void decide(vector<vector<int>>& clauses, vector<bool>& varStates){}
 
-    cout << "END CHECK !" << endl;
-	for(vector<int> clause:clauses){
-        for(auto b:clause){
-            cout << b << " ";
-        }
-        cout << endl;
+
+int main(int argc, char* argv[]){
+
+    if(argc<=1){
+            cout << "no input file" << endl;
+            return 0;
+    }
+
+    pair<vector<vector<int>>,int> parsed = parse(argv[1]);
+	vector<vector<int>> clauses = parsed.first;
+	if(parsed.second==0){
+        return 1;
 	}
 
-    cout << "END CHECK !" << endl;
+	vector<bool> rep = dpll(clauses, parsed.second);
+
     if(check(clauses, rep)){
-        cout << "accepted output :" << endl;
-        for(auto b:rep){
-            cout << b << endl;
+        cout << "s SATISFIABLE" << endl;
+        for(unsigned int i = 0;i<rep.size();i++){
+            if(rep[i])
+                cout << i+1 << " ";
+            else
+                cout << "-" << i+1 << " ";
         }
+        cout << 0 << endl;
     }
-    else{ cout << "no possible output :" << endl;}
+    else{cout << "s UNSATISFIABLE" << endl;}
 
 
 	return 0;
