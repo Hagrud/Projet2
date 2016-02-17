@@ -10,9 +10,9 @@ vector<bool> dpll(vector<vector<int>> clauses, int nV);
 
 vector<bool> dpll(vector<vector<int>> clauses, int nV){
 	vector<bool> varsStates(nV, true);
-	
+
 	dpll_rec(clauses, varsStates, nV, 0);
-	
+
 	//varsStates[i];
 	//varsStates.push_back(k);
 	return varsStates;
@@ -40,33 +40,54 @@ bool dpll_rec(vector<vector<int>>& clauses, vector<bool>& varsStates, int nV, in
 
 bool check(vector<vector<int>>& clauses, vector<bool>& varsStates){
 	for(auto vec:clauses){
+
+        for(auto b:vec){
+            cout << b << " ";
+        }
+        cout << endl;
+
 		bool state = false;
 		for(auto var: vec){
+            cout << var << endl;
 			if(var<0){
-				if(!varsStates[-var]){
+				if(!varsStates[-var-1]){
 					state = true;
-					break;				
+					break;
 				}
 			}
 			else{
-				if(varsStates[var]){
+				if(varsStates[var-1]){
 					state = true;
 					break;
 				}
 			}
 		}
-		if(!state){return false;}	
+		if(!state){return false;}
 	}
 	return true;
+
 }
 
 int main(){
 	vector<vector<int>> clauses = parse("test.cnf");
 	vector<bool> rep = dpll(clauses, 3);
 
-	for(auto b:rep){
-		cout << b << endl;	
+	for(vector<int> clause:clauses){
+        for(auto b:clause){
+            cout << b << " ";
+        }
+        cout << endl;
 	}
+
+    cout << "END CHECK !" << endl;
+    if(check(clauses, rep)){
+        cout << "accepted output :" << endl;
+        for(auto b:rep){
+            cout << b << endl;
+        }
+    }
+    else{ cout << "no possible output :" << endl;}
+
 
 	return 0;
 }
