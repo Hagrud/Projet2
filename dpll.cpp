@@ -70,8 +70,25 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV){
     deductions.resize(0);
     deductions.push_back({});
     while(true){
-
+        cout << "unit" << endl;
         while(unitProp(clauses, paris, deductions, varsStates)){}
+        cout << "/unit" << endl;
+
+        cout << "check1" << endl;
+
+        if(!checkWithNull(clauses, varsStates)){
+            for(auto var:deductions.back()){
+                varsStates[abs(var)] = -1;
+            }
+            deductions.pop_back();
+            cout<<paris.back()<<endl;
+            deductions.back().push_back(-paris.back());
+            paris.pop_back();
+        }
+        cout << "/check1" << endl;
+
+        for(auto p:varsStates){cout<<p<<" ";}
+        cout << endl;
 
         //Decide
         bool change = false;
@@ -89,16 +106,6 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV){
         if(!change){
             for(int i = 0;i<nV;i++){varsStatesBool[i]=(varsStates[i]==1);}
             return varsStatesBool;
-        }
-
-
-        if(!checkWithNull(clauses, varsStates)){
-            for(auto var:deductions.back()){
-                varsStates[abs(var)] = -1;
-            }
-            deductions.pop_back();
-            deductions.back().push_back(-paris.back());
-            paris.pop_back();
         }
     }
 }
@@ -127,17 +134,21 @@ bool checkWithNull(vector<vector<int>>& clauses, vector<int>& varsStates){
 }
 
 bool unitProp(vector<vector<int>>& clauses,vector<int>& paris,vector<vector<int>>& deductions,vector<int>& varsStates){
+    for(auto p:varsStates){cout << p << " ";}cout<<endl;
 	for(auto vec:clauses){
 		for(auto var:vec){
             if(var<0){
                 if(varsStates[-var-1]==-1){
                     int compteur = 0;
                     for(auto var2:vec){
-                        if(varsStates[abs(var2)-1]==-1){compteur++;}
+                        if(varsStates[abs(var2)-1]==-1){compteur++;if(compteur>1){break;}}
+
                     }
                     if(compteur==1){
                             varsStates[-var-1] = 0;
+                            cout<<"back"<<endl;
                             deductions.back().push_back(var);
+                            cout<<"/back"<<endl;
                             return true;
                     }
                     break;
@@ -150,10 +161,10 @@ bool unitProp(vector<vector<int>>& clauses,vector<int>& paris,vector<vector<int>
                 if(varsStates[var-1]==-1){
                     int compteur = 0;
                     for(auto var2:vec){
-                        if(varsStates[abs(var2)-1]==-1){compteur++;}
+                        if(varsStates[abs(var2)-1]==-1){compteur++;if(compteur>1){break;}}
                     }
                     if(compteur==1){
-                            varsStates[-var-1] = 1;
+                            varsStates[var-1] = 1;
                             deductions.back().push_back(var);
                             return true;
                     }
