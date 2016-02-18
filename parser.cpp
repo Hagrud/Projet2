@@ -5,7 +5,7 @@ using namespace std;
 pair<vector<vector<int>>,int> parse(const char* path)
 {
     vector< vector<int> > vars;
-    unsigned int V, C, val, Vmax = 0;
+    int V, C, val, Vmax = 0;
     string tmp;
     ifstream file(path);
 
