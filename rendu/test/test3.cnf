@@ -1,0 +1,6 @@
+c Test avec un commentaire avant le début du fichier
+p cnf 2  4 
+1 2
+1 2
+-1 -2
+-2 1

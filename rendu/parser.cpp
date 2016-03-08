@@ -1,10 +1,16 @@
 #include "parser.h"
 
+using namespace std;
+
+
+/**
+* @desc parse le fichier en entrée en une instance de SAT.
+* @return une instance de SAT et le nombre de variables.
+*/
 pair<vector<vector<int>>,int> parse(const char* path)
 {
     vector< vector<int> > vars;
-    int V, val, Vmax = 0;
-    unsigned int C = 0;
+    int V, C, val, Vmax = 0;
     string tmp;
     ifstream file(path);
 
@@ -27,12 +33,13 @@ pair<vector<vector<int>>,int> parse(const char* path)
 
     while(getline(file, line))
     {
-    vars.push_back({});
-	if(line[0] == 'c')
-	{
-	    continue;
-	}
 
+        if(line[0] == 'c')
+        {
+            continue;
+        }
+
+    vars.push_back({});
 	istringstream iss(line);
 
 	while(iss >> val && val != 0)
