@@ -27,7 +27,10 @@ pair<vector<vector<int>>,int> parse(const char* path)
 
     while(getline(file, line))
     {
-    vars.push_back({});
+	if(line.empty())
+	    continue;
+
+	vars.push_back({});
 	if(line[0] == 'c')
 	{
 	    continue;
@@ -46,7 +49,7 @@ pair<vector<vector<int>>,int> parse(const char* path)
         cout << "Le fichier contient " << vars.size() << " clause(s) alors que " << C << " clause(s) étaient annoncées." << endl;
     if(V!=Vmax)
         cout << "Le fichier contient " << Vmax << " variable(s) alors que " << V << " variable(s) étaient annoncées." << endl;
-
+    
     return make_pair(vars, Vmax);
 }
 
