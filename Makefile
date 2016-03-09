@@ -8,3 +8,4 @@ resol:
 	$(CC) $(CPPFLAGS) -o $(EXEC) dpll.cpp parser.cpp checker.cpp
 
 clean:
+	rm resol
