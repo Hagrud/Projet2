@@ -2,10 +2,19 @@ CPPFLAGS = -Wall -std=c++11
 EXEC = resol
 CC = g++
 
-all: resol
+SRC = $(wildcard *.cpp)
+OBJS = $(SRC:.cpp=.o)
 
-resol:
-	$(CC) $(CPPFLAGS) -o $(EXEC) dpll.cpp parser.cpp checker.cpp
+all: $(EXEC)
+
+$(EXEC): $(OBJS)
+	$(CC) $(CPPFLAGS) -o $@ $^
+
+%.o: %.c
+	$(CC) -o $@ -c $<
 
 clean:
-	rm resol
+	rm *.o
+
+mrproper: clean
+	rm $(EXEC)
