@@ -1,8 +1,8 @@
-CPPFLAGS = -Wall -std=c++11
+CPPFLAGS = -Wall -std=c++11 -g
 EXEC = resol
 CC = g++
 
-SRC = $(wildcard *.cpp)
+SRC = $(wildcard *.cpp) $(wildcard **/*.cpp)
 OBJS = $(SRC:.cpp=.o)
 
 all: $(EXEC)
