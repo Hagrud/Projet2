@@ -2,7 +2,6 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include "parser.h"
 #include "checker.h"
 
 

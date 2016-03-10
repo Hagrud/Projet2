@@ -55,8 +55,8 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV){
     vector<bool> varsStatesBool(nV, false);
 
     paris.resize(0);				//On a aucuns paris
-    deductions.resize(0);			//et aucunes déductions	
-    deductions.push_back({});			
+    deductions.resize(0);			//et aucunes déductions
+    deductions.push_back({});
 
     while(true){
         while(unitProp(clauses, paris, deductions, varsStates)){}
@@ -109,76 +109,43 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV){
 bool unitProp(vector<vector<int>>& clauses,vector<int>& paris,vector<vector<int>>& deductions,vector<int>& varsStates){
 	for(auto vec:clauses){		// Pour chaque clause on vérifie si il ya une seul variable libre
 		for(auto var:vec){	//	si elle n'est pas satisfiable on la fixe.
-            
+
 			//La variable est libre
-			if(varsStates[abs(var)-1]==-1){		
+			if(varsStates[abs(var)-1]==-1){
 				int compteur = 0;
 				for(auto var2:vec){
-		
+
 					//On vérifie que c'est la seul
 					if(varsStates[abs(var2)-1]==-1){
 						compteur++;
 						if(compteur>1){break;}
 					}
-					
+
 					//On vérifie que la clause n'est pas déja satisfaite
 					else if(varsStates[abs(var2)-1]==var2/abs(var2)){
-						compteur=2;					
+						compteur=2;
 					}
-	
+
 				}
 
 				//On fixe la variable.
 				if(compteur==1){
-					if(var<0)		
+					if(var<0)
 						varsStates[-var-1]=0;
 					else
 						varsStates[var-1]=1;
 					deductions.back().push_back(var);
-					return true;		
+					return true;
 				}
 				break;
 
 			}
-			
+
 			//On vérifie si la variable satisfait la clause.
 			if((var>0&&varsStates[var-1]==1)||(var<0&&varsStates[-var-1]==0)){
-				break;	
+				break;
 			}
 		}
 	}
 	return false;
-}
-
-int main(int argc, char* argv[]){
-
-    if(argc<=1){
-            cout << "no input file" << endl;
-            return 0;
-    }
-
-    pair<vector<vector<int>>,int> parsed = parse(argv[1]);
-	vector<vector<int>> clauses = parsed.first;
-	if(parsed.second==0){
-        return 1;
-	}
-
-	//vector<bool> rep = dpll_naif(clauses, parsed.second);
-
-    vector<bool> rep = dpll(clauses, parsed.second);
-
-    if(check(clauses, rep)){
-        cout << "s SATISFIABLE" << endl;
-        for(unsigned int i = 0;i<rep.size();i++){
-            if(rep[i])
-                cout << i+1 << " ";
-            else
-                cout << "-" << i+1 << " ";
-        }
-        cout << 0 << endl;
-    }
-    else{cout << "s UNSATISFIABLE" << endl;}
-
-
-	return 0;
 }
