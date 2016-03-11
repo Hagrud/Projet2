@@ -107,7 +107,11 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV){
 }
 
 bool unitProp(vector<vector<int>>& clauses,vector<int>& paris,vector<vector<int>>& deductions,vector<int>& varsStates){
+    vector<int> vue(varsStates.size(), 0);
+    vector<int> vue_en_cour(varsStates.size(), 0);
+
 	for(auto vec:clauses){		// Pour chaque clause on vérifie si il ya une seul variable libre
+            bool valid = false;
 		for(auto var:vec){	//	si elle n'est pas satisfiable on la fixe.
 
 			//La variable est libre
@@ -143,9 +147,45 @@ bool unitProp(vector<vector<int>>& clauses,vector<int>& paris,vector<vector<int>
 
 			//On vérifie si la variable satisfait la clause.
 			if((var>0&&varsStates[var-1]==1)||(var<0&&varsStates[-var-1]==0)){
+                valid = true;
 				break;
 			}
+
+			if(vue_en_cour[abs(var)-1]==0){
+                if(var<0){
+                    vue_en_cour[-var-1] = 2;
+                }
+                else{
+                    vue_en_cour[var-1] = 1;
+                }
+			}
+			else if(vue_en_cour[abs(var)-1]==1 && var<0){
+                vue_en_cour[abs(var)-1] = 3;
+			}
+			else if(vue_en_cour[abs(var)-1]==2 && var>0){
+                vue_en_cour[abs(var)-1] = 3;
+			}
 		}
+
+        for(unsigned int i = 0;i<vue.size();i++){
+            if(!valid && (vue_en_cour[i]==3 || vue_en_cour[i]+vue[i]==3))
+                vue[i]=3;
+            vue_en_cour[i] = 0;
+            }
 	}
-	return false;
+
+    bool change = false;
+    for(unsigned int i = 0;i<vue.size();i++){
+        if(vue[i]==1 && varsStates[i]==-1){
+            varsStates[i]=1;
+            change = true;
+        }
+
+        else if(vue[i]==2 && varsStates[i]==-1){
+            varsStates[i]=0;
+            change = true;
+        }
+    }
+
+	return change;
 }

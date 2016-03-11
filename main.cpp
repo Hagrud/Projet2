@@ -8,11 +8,11 @@ struct Option {
 };
 
 static Option options[] = {
-    {"Tseitin", "-tseitin",false},
-    {"watched literals", "-wl",false},
-    {"Maximum Occurrences in clauses of Minimum Size", "-moms",false},
-    {"Random", "-rand",false},
-    {"Dynamic Largest Individual Sum", "-dlis",false},
+    {"Dynamic Largest Individual Sum",                  "-dlis",    false},
+    {"Maximum Occurrences in clauses of Minimum Size",  "-moms",    false},
+    {"Random",                                          "-rand",    false},
+    {"Tseitin",                                         "-tseitin", false},
+    {"watched literals",                                "-wl",      false},
     {"", "", false}};
 
 
@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
     pair<vector<vector<int>>,int> parsed = parse(file);
     vector<vector<int>> clauses = parsed.first;
 
-    if(parsed.second==0){
+    if(parsed.second==0){   //Si on n'a pas de variable il y a une erreur.
         return 1;
     }
 
@@ -56,15 +56,31 @@ void reponse(vector<vector<int>>& clauses,vector<bool>& rep){
 }
 
 char* lire_args(int argc, char* argv[]){
-    char* file = nullptr;
-    for(int i = 1; i<argc; i++){
-        if(argv[i][0] != '-' && file==nullptr){
-            file = argv[i];
+    char* file = nullptr;           //nom du fichier a lire
+    bool arg_valide = false;        //validité de l'argument lu
+
+    for(int i = 1; i<argc; i++){//On lit tous les arguments sauf le nom du programme.
+        arg_valide = false;
+
+        if(argv[i][0] != '-'){  //Si l'argument n'est pas une option soit c'est le fichier soit c'est une erreur.
+
+            if(file != nullptr)
+                file = argv[i];
+
+            else
+                cout << "Warning incorrect argument : " << argv[i] << " the file to read is already : " << file << endl;
         }
-        Option *opt;
-        for(opt = options; opt->name != ""; opt++){
-            if(opt->id == argv[i]){
-                opt->active = true;
+        else{
+            Option *opt;
+            for(opt = options; opt->name != ""; opt++){//On vérifie si l'argument est une option connu.
+                if(opt->id == argv[i]){
+                    opt->active = true;
+                    arg_valide = true;
+                }
+            }
+
+            if(!arg_valide){
+                cout << "Warning unknown command : " << argv[i] << endl;
             }
         }
     }
@@ -75,6 +91,7 @@ char* lire_args(int argc, char* argv[]){
             cout << "Option : " << opt->name << " activated" << endl;
         }
     }
+
 
     return file;
 }
