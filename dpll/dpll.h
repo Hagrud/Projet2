@@ -7,6 +7,8 @@
 
 using namespace std;
 
+void init_dpll(vector<vector<int>> clauses, int nV, bool wl);
+
 bool dpll_rec(vector<vector<int>>& clauses, vector<bool>& varsStates, int nV, int pos);
 
 vector<bool> dpll(vector<vector<int>>& clauses, int nV);

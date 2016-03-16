@@ -1,5 +1,43 @@
 #include "dpll.h"
 
+static vector<vector<int>> clauses_masks_true;
+static vector<vector<int>> clauses_masks_false;
+static bool watchedL = false;
+
+
+void init_dpll(vector<vector<int>> clauses, int nV, bool wl){
+    watchedL = wl;
+
+    for(auto clause:clauses){
+        vector<int> mask_true(((nV-(nV%sizeof(int)))/sizeof(int))+1, 0);
+        vector<int> mask_false(((nV-(nV%sizeof(int)))/sizeof(int))+1, 0);
+
+        for(int var:clause){
+            if(var>0){
+                mask_true[(var-(var%sizeof(int)))/sizeof(int)] = mask_true[(var-(var%sizeof(int)))/sizeof(int)] + (1<<((var%sizeof(int))-1));
+            }
+            else{
+                mask_false[((-var)-((-var)%sizeof(int)))/sizeof(int)] = mask_false[((-var)-((-var)%sizeof(int)))/sizeof(int)] + (1<<(((-var)%sizeof(int))-1));
+            }
+        }
+
+        clauses_masks_false.push_back(mask_false);
+        clauses_masks_true.push_back(mask_true);
+    }
+
+    //Description
+    for(auto clause:clauses_masks_false){
+        for(unsigned int i = 0;i<((nV-(nV%sizeof(int)))/sizeof(int))+1;i++){
+            cout << "clause false " << i << " : " << clause[i] <<endl;
+        }
+    }
+    for(auto clause:clauses_masks_true){
+        for(unsigned int i = 0;i<((nV-(nV%sizeof(int)))/sizeof(int))+1;i++){
+            cout << "clause true " << i << " : " << clause[i] <<endl;
+        }
+    }
+}
+
 /**
 * @desc Cherche un solution au problème SAT posé dans clauses
 * @return instance des variables solutions de SAT. (ou une instance non solution si il n'y a pas de solution.)
