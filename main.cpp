@@ -34,6 +34,9 @@ int main(int argc, char* argv[]){
 
     //vector<bool> rep = dpll_naif(clauses, parsed.second);
 
+
+    init_dpll(clauses,parsed.second,false);
+
     vector<bool> rep = dpll(clauses, parsed.second);
 
     reponse(clauses, rep);
@@ -56,19 +59,15 @@ void reponse(vector<vector<int>>& clauses,vector<bool>& rep){
 }
 
 char* lire_args(int argc, char* argv[]){
-    char* file = nullptr;           //nom du fichier a lire
+    char* file = "";                //nom du fichier a lire
     bool arg_valide = false;        //validité de l'argument lu
 
     for(int i = 1; i<argc; i++){//On lit tous les arguments sauf le nom du programme.
         arg_valide = false;
 
         if(argv[i][0] != '-'){  //Si l'argument n'est pas une option soit c'est le fichier soit c'est une erreur.
-
-            if(file != nullptr)
                 file = argv[i];
-
-            else
-                cout << "Warning incorrect argument : " << argv[i] << " the file to read is already : " << file << endl;
+                //cout << "Warning incorrect argument : " << argv[i] << " the file to read is already : " << file << endl;
         }
         else{
             Option *opt;
