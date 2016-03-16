@@ -35,7 +35,7 @@ int main(int argc, char* argv[]){
     //vector<bool> rep = dpll_naif(clauses, parsed.second);
 
 
-    init_dpll(clauses,parsed.second,false);
+    //init_dpll(clauses,parsed.second,false);
 
     vector<bool> rep = dpll(clauses, parsed.second);
 
