@@ -1,9 +1,5 @@
 #include "dpll.h"
 
-/**
-* @desc Cherche un solution au problème SAT posé dans clauses
-* @return instance des variables solutions de SAT. (ou une instance non solution si il n'y a pas de solution.)
-*/
 vector<bool> dpll_naif(vector<vector<int>> clauses, int nV){
 	vector<bool> varsStates(nV, true);
 
@@ -12,10 +8,6 @@ vector<bool> dpll_naif(vector<vector<int>> clauses, int nV){
 	return varsStates;
 }
 
-/**
-* @desc Cherche récursivement sur toutes les instances possibles des variables une solution possible au problème SAT.
-* @return True si l'instance est solution du problème.
-*/
 bool dpll_rec(vector<vector<int>>& clauses, vector<bool>& varsStates, int nV, int pos){
 	//On vérifie si l'instance valide SAT.
 	if(check(clauses, varsStates)){return true;}
@@ -49,143 +41,203 @@ bool dpll_rec(vector<vector<int>>& clauses, vector<bool>& varsStates, int nV, in
 
 vector<bool> dpll(vector<vector<int>>& clauses, int nV){
 
-    vector<int> paris;				//Tableau des paris
-    vector<vector<int>> deductions;		//Déductions en fonction des paris
-    vector<int> varsStates(nV, -1);		//Valeur des variables (-1:null,0:false,1:true)
-    vector<bool> varsStatesBool(nV, false);
 
-    paris.resize(0);				//On a aucuns paris
-    deductions.resize(0);			//et aucunes déductions
+    vector<int> paris;				        //Tableau des paris
+    vector<vector<int>> deductions;		    //Déductions en fonction des paris
+    vector<int> varsStates(nV, -1);		    //Valeur des variables (-1:null,0:false,1:true)
+    vector<bool> varsStatesBool(nV, false);
+    vector<bool> clauses_valides(clauses.size(), false);    //Liste des clauses validées
+    vector<vector<int>> deductions_clauses;                 //Déduction des clauses valides a cause des paris.
+
+    paris.resize(0);				        //On a aucuns paris
+    deductions.resize(0);			        //et aucunes déductions
     deductions.push_back({});
+    deductions_clauses.resize(0);
+    deductions_clauses.push_back({});
 
     while(true){
-        while(unitProp(clauses, paris, deductions, varsStates)){}
 
+        /** Temps on fait toutes les déductions possibles sur le paris. **/
+        while(unitProp(clauses, paris, deductions, varsStates, clauses_valides,deductions_clauses) || polarite_unique(clauses, paris, deductions, varsStates)){}
+
+        /** On vérifie si le paris que l'on a fait est plausible. **/
         if(!checkWithNull(clauses, varsStates)){
-		//cout<<"paris faux"<<endl;
-            for(auto var:deductions.back()){
+
+            /** On supprime les déductions associées **/
+            for(int var:deductions.back()){
                 varsStates[abs(var)-1] = -1;
             }
+            for(int clause_id:deductions_clauses.back()){
+                clauses_valides[clause_id] = false;
+            }
 
-	    if(!paris.empty()){
+            /** Si on avait un paris il faut l'enlever **/
+            if(!paris.empty()){
             	deductions.pop_back();
-            	cout<<paris.back()<<endl;
             	deductions.back().push_back(-paris.back());
+                varsStates[paris.back()-1] = 0; //WARNING POUR PLUS TARD
             	paris.pop_back();
-	    }
-	    else{	//Faux alors qu'on a aucuns paris => pas satisfiable.
+            }
+            /** Sinon le problème n'est pas satisfiable. **/
+            else{
                 for(int i = 0;i<nV;i++){varsStatesBool[i]=(varsStates[i]==1);}
                 return varsStatesBool;
-	    }
-        }else{
-	            for(int i = 0;i<nV;i++){varsStatesBool[i]=(varsStates[i]==1);}
-		if(check(clauses,varsStatesBool)){return varsStatesBool;}
-	}
+            }
+        }
+        /** Sinon on vérifie si l'instance en cours vérifie le problème SAT (si oui on retourne) **/
+        else{
+            for(int i = 0;i<nV;i++){varsStatesBool[i]=(varsStates[i]==1);}
+            if(check(clauses,varsStatesBool)){return varsStatesBool;}
+        }
 
-        //for(auto p:varsStates){cout<<p<<" ";}
-        //cout << endl;
-
-        //Decide
+        /** On fait un paris **/
         bool change = false;
         for(unsigned int varID = 0;varID<varsStates.size();varID++){
             if(varsStates[varID]==-1){
                 paris.push_back(varID+1);
                 varsStates[varID] = 1;
                 change = true;
-		//cout<<"paris : "<<varID+1<<endl;
                 break;
             }
         }
+        if(change){
+            deductions.push_back({});
+            deductions_clauses.push_back({});
+        }
 
-        deductions.push_back({});
 
+        /** Si on n'a pas réussi a faire de paris le précédent était faux**/
         if(!change){
-            for(int i = 0;i<nV;i++){varsStatesBool[i]=(varsStates[i]==1);}
-            return varsStatesBool;
+
+            /** On supprime les déductions associées **/
+            for(int var:deductions.back()){
+                varsStates[abs(var)-1] = -1;
+            }
+            for(int clause_id:deductions_clauses.back()){
+                clauses_valides[clause_id] = false;
+            }
+
+            /** Si on avait un paris il faut l'enlever **/
+            if(!paris.empty()){
+            	deductions.pop_back();
+            	deductions.back().push_back(-paris.back());
+            	varsStates[paris.back()-1] = 0;//WARNING POUR PLUS TARD
+            	paris.pop_back();
+            }
+            /** Sinon le problème n'est pas satisfiable. **/
+            else{
+                for(int i = 0;i<nV;i++){varsStatesBool[i]=(varsStates[i]==1);}
+                return varsStatesBool;
+            }
         }
     }
 }
 
-bool unitProp(vector<vector<int>>& clauses,vector<int>& paris,vector<vector<int>>& deductions,vector<int>& varsStates){
+bool unitProp(vector<vector<int>>& clauses,
+              vector<int>& paris,vector<vector<int>>& deductions,
+              vector<int>& varsStates,
+              vector<bool>& clauses_valides,
+              vector<vector<int>>& deductions_clauses){
+
     vector<int> vue(varsStates.size(), 0);
     vector<int> vue_en_cour(varsStates.size(), 0);
 
-	for(auto vec:clauses){		// Pour chaque clause on vérifie si il ya une seul variable libre
-            bool valid = false;
-		for(auto var:vec){	//	si elle n'est pas satisfiable on la fixe.
 
-			//La variable est libre
+    /** On va vérifier chaque clause une par une. **/
+    vector<int> clause;
+	for(unsigned int clause_id = 0;clause_id < clauses.size(); clause_id++){
+
+        /** Si la clause est déja validé on ne la traite pas **/
+        if(!clauses_valides[clause_id])
+            continue;
+
+        clause = clauses[clause_id];
+
+        /** On vérifie si la clause est "unitaire" **/
+		for(int var:clause){
+
+			/** On vérifie le nombre de variable libre **/
 			if(varsStates[abs(var)-1]==-1){
 				int compteur = 0;
-				for(auto var2:vec){
-
-					//On vérifie que c'est la seul
+				for(auto var2:clause){
 					if(varsStates[abs(var2)-1]==-1){
 						compteur++;
 						if(compteur>1){break;}
 					}
 
-					//On vérifie que la clause n'est pas déja satisfaite
+					/** On vérifie au passage si la clause n'est pas déjà satisfaite **/
 					else if(varsStates[abs(var2)-1]==var2/abs(var2)){
 						compteur=2;
+						clauses_valides[clause_id] = true;
+						deductions_clauses.back().push_back(clause_id);
 					}
 
 				}
 
-				//On fixe la variable.
+				/** On fixe la variable si on a une clause unitaire **/
 				if(compteur==1){
 					if(var<0)
 						varsStates[-var-1]=0;
 					else
 						varsStates[var-1]=1;
 					deductions.back().push_back(var);
+                    clauses_valides[clause_id] = true;
+                    deductions_clauses.back().push_back(clause_id);
 					return true;
 				}
 				break;
 
 			}
 
-			//On vérifie si la variable satisfait la clause.
+			/** On vérifie au passage si la clause n'est pas déjà satisfaite **/
 			if((var>0&&varsStates[var-1]==1)||(var<0&&varsStates[-var-1]==0)){
-                valid = true;
+                clauses_valides[clause_id] = true;
+                deductions_clauses.back().push_back(clause_id);
 				break;
 			}
-
-			if(vue_en_cour[abs(var)-1]==0){
-                if(var<0){
-                    vue_en_cour[-var-1] = 2;
-                }
-                else{
-                    vue_en_cour[var-1] = 1;
-                }
-			}
-			else if(vue_en_cour[abs(var)-1]==1 && var<0){
-                vue_en_cour[abs(var)-1] = 3;
-			}
-			else if(vue_en_cour[abs(var)-1]==2 && var>0){
-                vue_en_cour[abs(var)-1] = 3;
-			}
 		}
-
-        for(unsigned int i = 0;i<vue.size();i++){
-            if(!valid && (vue_en_cour[i]==3 || vue_en_cour[i]+vue[i]==3))
-                vue[i]=3;
-            vue_en_cour[i] = 0;
-            }
 	}
 
+	return false;
+}
+
+bool polarite_unique(vector<vector<int>>& clauses,
+                     vector<int>& paris,
+                     vector<vector<int>>& deductions,
+                     vector<int>& varsStates){
+
+    vector<bool> var_true(varsStates.size(), false);    //Liste des variables qui apparaissent avec la polarité positive.
+    vector<bool> var_false(varsStates.size(), false);   //Liste des variables qui apparaissent avec la polarité négative.
+
+    /** Lecture de chaques variables. **/
+    for(vector<int> clause:clauses){
+        for(int var:clause){
+            /** Si une variable n'est pas fixée on l'enregistre. **/
+            if(varsStates[abs(var)-1]==-1){
+                if(var>0){
+                    var_true[var-1]=true;
+                }
+                else{
+                    var_false[-var-1]=true;
+                }
+            }
+        }
+    }
+
+    /** On vérifie si des variables ne sont vuent qu'avec une seule polaritée. **/
     bool change = false;
-    for(unsigned int i = 0;i<vue.size();i++){
-        if(vue[i]==1 && varsStates[i]==-1){
-            varsStates[i]=1;
+    for(unsigned int i = 0;i<var_true.size();i++){
+        if(var_true[i] && !var_false[i]){
+            deductions.back().push_back(i+1);
+            varsStates[i] = 1;
             change = true;
         }
-
-        else if(vue[i]==2 && varsStates[i]==-1){
-            varsStates[i]=0;
+        else if(!var_true[i] && var_false[i]){
+            deductions.back().push_back(-i-1);
+            varsStates[i] = 0;
             change = true;
         }
     }
 
-	return change;
+    return change;
 }
