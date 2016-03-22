@@ -1,9 +1,5 @@
 #include "dpll.h"
 
-/**
-* @desc Cherche un solution au problème SAT posé dans clauses
-* @return instance des variables solutions de SAT. (ou une instance non solution si il n'y a pas de solution.)
-*/
 vector<bool> dpll_naif(vector<vector<int>> clauses, int nV){
 	vector<bool> varsStates(nV, true);
 
@@ -12,10 +8,6 @@ vector<bool> dpll_naif(vector<vector<int>> clauses, int nV){
 	return varsStates;
 }
 
-/**
-* @desc Cherche récursivement sur toutes les instances possibles des variables une solution possible au problème SAT.
-* @return True si l'instance est solution du problème.
-*/
 bool dpll_rec(vector<vector<int>>& clauses, vector<bool>& varsStates, int nV, int pos){
 	//On vérifie si l'instance valide SAT.
 	if(check(clauses, varsStates)){return true;}
@@ -49,17 +41,18 @@ bool dpll_rec(vector<vector<int>>& clauses, vector<bool>& varsStates, int nV, in
 
 vector<bool> dpll(vector<vector<int>>& clauses, int nV){
 
-    vector<int> paris;				//Tableau des paris
-    vector<vector<int>> deductions;		//Déductions en fonction des paris
-    vector<int> varsStates(nV, -1);		//Valeur des variables (-1:null,0:false,1:true)
+    vector<int> paris;				        //Tableau des paris
+    vector<vector<int>> deductions;		    //Déductions en fonction des paris
+    vector<int> varsStates(nV, -1);		    //Valeur des variables (-1:null,0:false,1:true)
     vector<bool> varsStatesBool(nV, false);
 
-    paris.resize(0);				//On a aucuns paris
-    deductions.resize(0);			//et aucunes déductions
+    paris.resize(0);				        //On a aucuns paris
+    deductions.resize(0);			        //et aucunes déductions
     deductions.push_back({});
 
     while(true){
-        while(unitProp(clauses, paris, deductions, varsStates)){}
+        while(unitProp(clauses, paris, deductions, varsStates) || polarite_unique(clauses, paris, deductions, varsStates)){}
+
 
         if(!checkWithNull(clauses, varsStates)){
 		//cout<<"paris faux"<<endl;
@@ -188,4 +181,38 @@ bool unitProp(vector<vector<int>>& clauses,vector<int>& paris,vector<vector<int>
     }
 
 	return change;
+}
+
+bool polarite_unique(vector<vector<int>>& clauses,vector<int>& paris,vector<vector<int>>& deductions,vector<int>& varsStates){
+    vector<bool> var_true(varsStates.size(), false);
+    vector<bool> var_false(varsStates.size(), false);
+
+    for(vector<int> clause:clauses){
+        for(int var:clause){
+            if(varsStates[abs(var)-1]==-1){
+                if(var>0){
+                    var_true[var-1]=true;
+                }
+                else{
+                    var_false[var-1]=true;
+                }
+            }
+        }
+    }
+
+    bool change = false;
+    for(unsigned int i = 0;i<var_true.size();i++){
+        if(var_true[i] && !var_false[i]){
+            deductions.back().push_back(i+1);
+            varsStates[i] = 1;
+            change = true;
+        }
+        else if(!var_true[i] && var_false[i]){
+            deductions.back().push_back(-i-1);
+            varsStates[i] = 0;
+            change = true;
+        }
+    }
+
+    return change;
 }

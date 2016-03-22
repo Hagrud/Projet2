@@ -32,11 +32,6 @@ int main(int argc, char* argv[]){
         return 1;
     }
 
-    //vector<bool> rep = dpll_naif(clauses, parsed.second);
-
-
-    //init_dpll(clauses,parsed.second,false);
-
     vector<bool> rep = dpll(clauses, parsed.second);
 
     reponse(clauses, rep);
@@ -59,7 +54,7 @@ void reponse(vector<vector<int>>& clauses,vector<bool>& rep){
 }
 
 char* lire_args(int argc, char* argv[]){
-    char* file = "";                //nom du fichier a lire
+    char* file;                //nom du fichier a lire
     bool arg_valide = false;        //validité de l'argument lu
 
     for(int i = 1; i<argc; i++){//On lit tous les arguments sauf le nom du programme.
