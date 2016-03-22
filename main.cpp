@@ -33,7 +33,7 @@ int main(int argc, char* argv[]){
     }
 
     vector<bool> rep = dpll(clauses, parsed.second);
-
+    //vector<bool> rep = dpll_naif(clauses, parsed.second);
     reponse(clauses, rep);
 
     return 0;

@@ -40,6 +40,9 @@ bool unitProp(vector<vector<int>>& clauses,
 *@desc Cherche une variable qui a une polarité unique.
 *@return True si la fonction a trouvé une variable qui a une polarité unique.
 */
-bool polarite_unique(vector<vector<int>>& clauses,vector<int>& paris,vector<vector<int>>& deductions,vector<int>& varsStates);
+bool polarite_unique(vector<vector<int>>& clauses,
+                     vector<int>& paris,
+                     vector<vector<int>>& deductions,
+                     vector<int>& varsStates);
 
 

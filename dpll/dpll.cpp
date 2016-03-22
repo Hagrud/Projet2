@@ -74,8 +74,8 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV){
             /** Si on avait un paris il faut l'enlever **/
             if(!paris.empty()){
             	deductions.pop_back();
-            	cout<<paris.back()<<endl;
             	deductions.back().push_back(-paris.back());
+                varsStates[paris.back()-1] = 0; //WARNING POUR PLUS TARD
             	paris.pop_back();
             }
             /** Sinon le problème n'est pas satisfiable. **/
@@ -100,14 +100,35 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV){
                 break;
             }
         }
+        if(change){
+            deductions.push_back({});
+            deductions_clauses.push_back({});
+        }
 
-        deductions.push_back({});
-        deductions_clauses.push_back({});
 
-        /** Si on n'a pas réussi a faire de paris on retourne l'instance en cours **/
+        /** Si on n'a pas réussi a faire de paris le précédent était faux**/
         if(!change){
-            for(int i = 0;i<nV;i++){varsStatesBool[i]=(varsStates[i]==1);}
-            return varsStatesBool;
+
+            /** On supprime les déductions associées **/
+            for(int var:deductions.back()){
+                varsStates[abs(var)-1] = -1;
+            }
+            for(int clause_id:deductions_clauses.back()){
+                clauses_valides[clause_id] = false;
+            }
+
+            /** Si on avait un paris il faut l'enlever **/
+            if(!paris.empty()){
+            	deductions.pop_back();
+            	deductions.back().push_back(-paris.back());
+            	varsStates[paris.back()-1] = 0;//WARNING POUR PLUS TARD
+            	paris.pop_back();
+            }
+            /** Sinon le problème n'est pas satisfiable. **/
+            else{
+                for(int i = 0;i<nV;i++){varsStatesBool[i]=(varsStates[i]==1);}
+                return varsStatesBool;
+            }
         }
     }
 }
@@ -180,7 +201,10 @@ bool unitProp(vector<vector<int>>& clauses,
 	return false;
 }
 
-bool polarite_unique(vector<vector<int>>& clauses,vector<int>& paris,vector<vector<int>>& deductions,vector<int>& varsStates){
+bool polarite_unique(vector<vector<int>>& clauses,
+                     vector<int>& paris,
+                     vector<vector<int>>& deductions,
+                     vector<int>& varsStates){
 
     vector<bool> var_true(varsStates.size(), false);    //Liste des variables qui apparaissent avec la polarité positive.
     vector<bool> var_false(varsStates.size(), false);   //Liste des variables qui apparaissent avec la polarité négative.
