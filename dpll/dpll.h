@@ -29,7 +29,12 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV);
 *@desc Cherche une clause unitaire.
 *@return True si la fonction a trouvé une clause unitaire.
 */
-bool unitProp(vector<vector<int>>& clauses,vector<int>& paris,vector<vector<int>>& deductions,vector<int>& varsStates);
+bool unitProp(vector<vector<int>>& clauses,
+              vector<int>& paris,
+              vector<vector<int>>& deductions,
+              vector<int>& varsStates,
+              vector<bool>& clauses_valides,
+              vector<vector<int>>& deductions_clauses);
 
 /**
 *@desc Cherche une variable qui a une polarité unique.
