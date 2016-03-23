@@ -1,3 +1,2 @@
-#include "tseitin.h"
-
+#include "tseitin.hpp"
 
