@@ -17,7 +17,7 @@ bool dpll_rec(vector<vector<int>>& clauses, vector<bool>& varsStates, int nV, in
         bool val = dpll_rec(clauses, varsStates, nV, pos+1);
 		if(val){return true;}
 
-	//Sinon on chance celle-ci
+		//Sinon on chance celle-ci
 		varsStates[pos] = !varsStates[pos];
         val = dpll_rec(clauses, varsStates, nV, pos+1);
         if(val)
@@ -55,17 +55,30 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV){
     deductions_clauses.resize(0);
     deductions_clauses.push_back({});
 
+	set_libre(nV);
+
     while(true){
 
         /** Temps on fait toutes les déductions possibles sur le paris. **/
         while(unitProp(clauses, paris, deductions, varsStates, clauses_valides,deductions_clauses) || polarite_unique(clauses, paris, deductions, varsStates)){}
 
+		//
+		//cout << "paris : [ ";
+		//for(int p:paris){cout << p << " ";} cout << "]" << endl;
+		//cout << "state : [ ";
+		//for(int p:varsStates){cout << p << " ";} cout << "]" << endl;
+		//cout << "deduction : [ ";
+		//for(int p:deductions.back()){cout << p << " ";} cout << "]" << endl;
+		//	
+
+
         /** On vérifie si le paris que l'on a fait est plausible. **/
         if(!checkWithNull(clauses, varsStates)){
-
+			
             /** On supprime les déductions associées **/
             for(int var:deductions.back()){
                 varsStates[abs(var)-1] = -1;
+				change_libre(1);
             }
             for(int clause_id:deductions_clauses.back()){
                 clauses_valides[clause_id] = false;
@@ -75,7 +88,13 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV){
             if(!paris.empty()){
             	deductions.pop_back();
             	deductions.back().push_back(-paris.back());
-                varsStates[paris.back()-1] = 0; //WARNING POUR PLUS TARD
+				if(varsStates[paris.back()-1] == 0){
+					 varsStates[paris.back()-1] = 1;
+				}
+				else{
+                	varsStates[paris.back()-1] = 0; //WARNING POUR PLUS TARD
+				}
+
             	paris.pop_back();
             }
             /** Sinon le problème n'est pas satisfiable. **/
@@ -91,15 +110,8 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV){
         }
 
         /** On fait un paris **/
-        bool change = false;
-        for(unsigned int varID = 0;varID<varsStates.size();varID++){
-            if(varsStates[varID]==-1){
-                paris.push_back(varID+1);
-                varsStates[varID] = 1;
-                change = true;
-                break;
-            }
-        }
+        bool change = make_paris(varsStates, paris);
+
         if(change){
             deductions.push_back({});
             deductions_clauses.push_back({});
@@ -112,6 +124,7 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV){
             /** On supprime les déductions associées **/
             for(int var:deductions.back()){
                 varsStates[abs(var)-1] = -1;
+				change_libre(1);
             }
             for(int clause_id:deductions_clauses.back()){
                 clauses_valides[clause_id] = false;
@@ -183,6 +196,7 @@ bool unitProp(vector<vector<int>>& clauses,
 					deductions.back().push_back(var);
                     clauses_valides[clause_id] = true;
                     deductions_clauses.back().push_back(clause_id);
+					change_libre(-1);
 					return true;
 				}
 				break;
@@ -230,11 +244,13 @@ bool polarite_unique(vector<vector<int>>& clauses,
         if(var_true[i] && !var_false[i]){
             deductions.back().push_back(i+1);
             varsStates[i] = 1;
+			change_libre(-1);
             change = true;
         }
         else if(!var_true[i] && var_false[i]){
             deductions.back().push_back(-i-1);
             varsStates[i] = 0;
+			change_libre(-1);
             change = true;
         }
     }
