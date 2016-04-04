@@ -28,10 +28,18 @@ int main(int argc, char* argv[]){
     pair<vector<vector<int>>,int> parsed = parse(file);
     vector<vector<int>> clauses = parsed.first;
 
+	//cout << "clauses :: [" << endl;
+    //for(auto c:clauses){cout << "[ ";for(auto p:c){cout << p << " ";}cout << "]" << endl;}
+	//cout << "]" << endl;
+
+
+
     if(parsed.second==0){   //Si on n'a pas de variable il y a une erreur.
-        return 1;
+		cout << "s SATISFIABLE" << endl;
+        return 0;
     }
 
+	set_rand(options[2].active);
     vector<bool> rep = dpll(clauses, parsed.second);
     //vector<bool> rep = dpll_naif(clauses, parsed.second);
     reponse(clauses, rep);
