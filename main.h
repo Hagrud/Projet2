@@ -5,7 +5,6 @@
 
 #include "parser.h"
 #include "dpll/dpll.h"
-#include "dpll/paris.h"
 
 
 using namespace std;

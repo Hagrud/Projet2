@@ -41,18 +41,15 @@ pair<vector<vector<int>>,int> parse(const char* path)
 	while(iss >> val && val != 0)
 	{
 	    vars.back().push_back(val);
-	    Vmax = max(Vmax, abs(val) );
+	    Vmax = max(Vmax,val);
 	}
     }
-
-	if(vars.back().empty())
-		vars.pop_back();
 
     if(C!=vars.size())
         cout << "Le fichier contient " << vars.size() << " clause(s) alors que " << C << " clause(s) étaient annoncées." << endl;
     if(V!=Vmax)
         cout << "Le fichier contient " << Vmax << " variable(s) alors que " << V << " variable(s) étaient annoncées." << endl;
-
+    
     return make_pair(vars, Vmax);
 }
 
