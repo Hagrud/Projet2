@@ -5,7 +5,7 @@
 using namespace std;
 
 
-void set_rand(bool rando);
+void set_option(bool rand, bool moms);
 
 bool make_paris(vector<int>& varsStates, vector<int>& paris);
 

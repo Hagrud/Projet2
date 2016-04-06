@@ -8,11 +8,12 @@ struct Option {
 };
 
 static Option options[] = {
-    {"Dynamic Largest Individual Sum",                  "-dlis",    false},
-    {"Maximum Occurrences in clauses of Minimum Size",  "-moms",    false},
-    {"Random",                                          "-rand",    false},
-    {"Tseitin",                                         "-tseitin", false},
-    {"watched literals",                                "-wl",      false},
+    {"Dynamic Largest Individual Sum",                  "-dlis",   		false},
+    {"Maximum Occurrences in clauses of Minimum Size",  "-moms",    	false},
+    {"Random",                                          "-rand",    	false},
+    {"Tseitin",                                         "-tseitin", 	false},
+	{"Exploration de conflit",							"-cl-interac", 	false},
+    {"watched literals",                                "-wl",      	false},
     {"", "", false}};
 
 
@@ -39,8 +40,8 @@ int main(int argc, char* argv[]){
         return 0;
     }
 
-	set_rand(options[2].active);
-    vector<bool> rep = dpll(clauses, parsed.second);
+	init();
+    vector<bool> rep = dpll(clauses, parsed.second, !(get_option("cl-interac") || get_option("wl")));
     //vector<bool> rep = dpll_naif(clauses, parsed.second);
     reponse(clauses, rep);
 
@@ -96,4 +97,20 @@ char* lire_args(int argc, char* argv[]){
 
 
     return file;
+}
+
+bool get_option(string option){
+	option = "-" + option;
+	Option *opt;
+    for(opt = options; opt->name != ""; opt++){//On vérifie si l'argument est une option connu.
+    	if(opt->id == option){
+        	return opt->active;
+		}
+	}
+	return false;
+}
+
+void init(){
+	set_option(get_option("rand"), get_option("moms"));
+	init_graph_cpp(get_option("cl-interac"));
 }

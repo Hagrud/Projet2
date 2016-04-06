@@ -1,10 +1,12 @@
 #include "paris.h"
 
 static bool RANDP = false;
+static bool MOMS = false;
 static int libres;
 
-void set_rand(bool rando){
-	RANDP = rando;
+void set_option(bool rand, bool moms){
+	RANDP = rand;
+	MOMS = moms;
 }
 
 void set_libre(int nV){
@@ -18,6 +20,9 @@ void change_libre(int n){
 bool make_paris(vector<int>& varsStates, vector<int>& paris){
 	if(RANDP){
 		return rand_paris(varsStates, paris);
+	}
+	if(MOMS){
+		//return moms_paris(varsStates, paris);
 	}
 	return basic_paris(varsStates, paris);
 }

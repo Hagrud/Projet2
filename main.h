@@ -6,6 +6,7 @@
 #include "parser.h"
 #include "dpll/dpll.h"
 #include "dpll/paris.h"
+#include "dpll/graph.h"
 
 
 using namespace std;
@@ -20,3 +21,7 @@ char* lire_args(int argc, char* argv[]);
 *@desc Met en forme la réponse du programme.
 */
 void reponse(vector<vector<int>>& clauses,vector<bool>& rep);
+
+bool get_option(string option);
+
+void init();
