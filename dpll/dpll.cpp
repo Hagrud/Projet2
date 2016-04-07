@@ -61,8 +61,8 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV, bool polarite_active){
     while(true){
 
         /** Temps on fait toutes les déductions possibles sur le paris. **/
-        while(unitProp(clauses, paris, deductions, varsStates, clauses_valides,deductions_clauses, source_deduction) || 						((polarite_active || paris.size() == 0) && 
-						polarite_unique(clauses, paris, deductions, varsStates, source_deduction))){}
+        while(unitProp(clauses, paris, deductions, varsStates, clauses_valides,deductions_clauses, source_deduction) ||
+              ((polarite_active || paris.size() == 0) && polarite_unique(clauses, paris, deductions, varsStates))){}
 
 		//
 		//cout << "paris : [ ";
@@ -71,44 +71,11 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV, bool polarite_active){
 		//for(int p:varsStates){cout << p << " ";} cout << "]" << endl;
 		//cout << "deduction : [ ";
 		//for(int p:deductions.back()){cout << p << " ";} cout << "]" << endl;
-		//	
+		//
 
-
-        /** On vérifie si le paris que l'on a fait est plausible. **/
-        if(!checkWithNull(clauses, varsStates)){
-			
-            /** On supprime les déductions associées **/
-            for(int var:deductions.back()){
-                varsStates[abs(var)-1] = -1;
-				change_libre(1);
-            }
-            for(int clause_id:deductions_clauses.back()){
-                clauses_valides[clause_id] = false;
-            }
-
-            /** Si on avait un paris il faut l'enlever **/
-            if(!paris.empty()){
-            	deductions.pop_back();
-            	deductions.back().push_back(-paris.back());
-				if(varsStates[paris.back()-1] == 0){
-					 varsStates[paris.back()-1] = 1;
-				}
-				else{
-                	varsStates[paris.back()-1] = 0; //WARNING POUR PLUS TARD
-				}
-
-            	paris.pop_back();
-            }
-            /** Sinon le problème n'est pas satisfiable. **/
-            else{
-                for(int i = 0;i<nV;i++){varsStatesBool[i]=(varsStates[i]==1);}
-                return varsStatesBool;
-            }
-        }
-        /** Sinon on vérifie si l'instance en cours vérifie le problème SAT (si oui on retourne) **/
-        else{
-            for(int i = 0;i<nV;i++){varsStatesBool[i]=(varsStates[i]==1);}
-            if(check(clauses,varsStatesBool)){return varsStatesBool;}
+        if(backtrack(clauses, paris, deductions, varsStates, clauses_valides,deductions_clauses, source_deduction, varsStatesBool,
+                     nV, polarite_active)){
+            return varsStatesBool;
         }
 
         /** On fait un paris **/

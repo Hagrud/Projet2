@@ -26,5 +26,4 @@ bool unitProp(vector<vector<int>>& clauses,
 bool polarite_unique(vector<vector<int>>& clauses,
                      vector<int>& paris,
                      vector<vector<int>>& deductions,
-                     vector<int>& varsStates,
-					 vector<int>& source_deduction);
+                     vector<int>& varsStates);

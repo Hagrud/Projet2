@@ -5,6 +5,7 @@
 #include "checker.h"
 #include "paris.h"
 #include "deduction.h"
+#include "backtrack.h"
 
 
 using namespace std;
