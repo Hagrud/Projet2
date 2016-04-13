@@ -1,10 +1,20 @@
+#include <cstdio>
+#include <cstdlib>
 #include <vector>
+#include <set>
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
 
 #include "parser.h"
 #include "dpll/dpll.h"
+#include "tseitin/expr.hpp"
+#include "tseitin/expr.tab.hpp"
+
+extern "C" FILE *yyin;
+extern Expr *res;
+    
+
 
 
 using namespace std;
@@ -19,3 +29,5 @@ char* lire_args(int argc, char* argv[]);
 *@desc Met en forme la réponse du programme.
 */
 void reponse(vector<vector<int>>& clauses,vector<bool>& rep);
+
+char* create_tseitin(char* file);

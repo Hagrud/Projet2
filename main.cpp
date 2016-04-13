@@ -86,6 +86,76 @@ char* lire_args(int argc, char* argv[]){
         }
     }
 
+    if(options[3].active)
+    {
+	file = create_tseitin(file);
+    }
 
     return file;
+}
+
+char* create_tseitin(char* file)
+{
+    freopen(file, "r", stdin);
+
+    yyparse();
+    
+    strcat(file, ".cnf");
+    
+    ofstream myfile;
+    myfile.open(file);
+
+    int var_count = 0, cur_var_count = 0, clause_count = 0;
+    
+    vector<Expr*> exprs;
+    
+    set<int> vars;
+    
+    res->get_vars(vars);
+
+    int max_var = 0;
+    for(auto it : vars)
+	max_var = max(it, max_var);
+    
+    Expr * var = res->tseitin(max_var, exprs);
+    exprs.push_back(var);
+
+    string result;
+    for(int i = 0; i < (int)exprs.size(); i++)
+    {
+	clause_count++;
+
+	cout << exprs[i]->to_string() << endl;
+	
+	result += exprs[i]->to_cnf(cur_var_count, clause_count);
+	var_count = max(cur_var_count, var_count);
+	cur_var_count = 0;
+	
+	result += "\n";
+    }
+
+
+
+    for(int i = 0; i < (int)result.size() - 1; i++)
+    {
+	if(result[i] == '-' && result[i+1] == '-')
+	{
+	    result.erase(i, 1);
+	}
+
+    }
+    
+    myfile << "p cnf " << var_count << " " << clause_count << endl;
+    myfile << result;
+
+    cout << "p cnf " << var_count << " " << clause_count << endl << result;
+    
+    return file;
+}
+
+
+void yyerror(const char *s) {
+    cout << "EEK, parse error!  Message: " << s << endl;
+    // might as well halt now:
+    exit(-1);
 }
