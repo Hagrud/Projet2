@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_EXPR_TAB_HPP_INCLUDED
-# define YY_YY_EXPR_TAB_HPP_INCLUDED
+#ifndef YY_YY_TSEITIN_EXPR_TAB_HPP_INCLUDED
+# define YY_YY_TSEITIN_EXPR_TAB_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -45,11 +45,11 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    TK_IMPL = 258,
-    TK_EQ = 259,
-    TK_AND = 260,
-    TK_OR = 261,
-    TK_XOR = 262,
+    TK_EQ = 258,
+    TK_IMPL = 259,
+    TK_XOR = 260,
+    TK_AND = 261,
+    TK_OR = 262,
     TK_LPAREN = 263,
     TK_RPAREN = 264,
     TK_NEG = 265,
@@ -62,12 +62,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 21 "expr.ypp" /* yacc.c:1909  */
+#line 21 "tseitin/expr.ypp" /* yacc.c:1909  */
 
     int ival;
     class Expr *exp;
 
-#line 71 "expr.tab.hpp" /* yacc.c:1909  */
+#line 71 "tseitin/expr.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -80,4 +80,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_EXPR_TAB_HPP_INCLUDED  */
+#endif /* !YY_YY_TSEITIN_EXPR_TAB_HPP_INCLUDED  */

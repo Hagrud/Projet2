@@ -1,11 +1,3 @@
-État 7 conflits: 1 décalage/réduction
-État 15 conflits: 1 décalage/réduction
-État 16 conflits: 1 décalage/réduction
-État 17 conflits: 1 décalage/réduction
-État 18 conflits: 1 décalage/réduction
-État 19 conflits: 5 décalage/réduction
-
-
 Grammaire
 
     0 $accept: input $end
@@ -26,11 +18,11 @@ Terminaux, suivis des règles où ils apparaissent
 
 $end (0) 0
 error (256)
-TK_IMPL (258) 8
-TK_EQ (259) 9
-TK_AND (260) 5
-TK_OR (261) 4
-TK_XOR (262) 7
+TK_EQ (258) 9
+TK_IMPL (259) 8
+TK_XOR (260) 7
+TK_AND (261) 5
+TK_OR (262) 4
 TK_LPAREN (263) 3
 TK_RPAREN (264) 3
 TK_NEG (265) 6
@@ -129,11 +121,11 @@ expression (14)
     8           | expression . TK_IMPL expression
     9           | expression . TK_EQ expression
 
-    TK_IMPL  décalage et aller à l'état 9
-    TK_EQ    décalage et aller à l'état 10
-    TK_AND   décalage et aller à l'état 11
-    TK_OR    décalage et aller à l'état 12
-    TK_XOR   décalage et aller à l'état 13
+    TK_EQ    décalage et aller à l'état 9
+    TK_IMPL  décalage et aller à l'état 10
+    TK_XOR   décalage et aller à l'état 11
+    TK_AND   décalage et aller à l'état 12
+    TK_OR    décalage et aller à l'état 13
 
     $défaut  réduction par utilisation de la règle 1 (input)
 
@@ -147,11 +139,11 @@ expression (14)
     8           | expression . TK_IMPL expression
     9           | expression . TK_EQ expression
 
-    TK_IMPL    décalage et aller à l'état 9
-    TK_EQ      décalage et aller à l'état 10
-    TK_AND     décalage et aller à l'état 11
-    TK_OR      décalage et aller à l'état 12
-    TK_XOR     décalage et aller à l'état 13
+    TK_EQ      décalage et aller à l'état 9
+    TK_IMPL    décalage et aller à l'état 10
+    TK_XOR     décalage et aller à l'état 11
+    TK_AND     décalage et aller à l'état 12
+    TK_OR      décalage et aller à l'état 13
     TK_RPAREN  décalage et aller à l'état 14
 
 
@@ -159,18 +151,16 @@ expression (14)
 
     4 expression: expression . TK_OR expression
     5           | expression . TK_AND expression
-    6           | TK_NEG expression .  [$end, TK_IMPL, TK_EQ, TK_AND, TK_OR, TK_XOR, TK_RPAREN]
+    6           | TK_NEG expression .  [$end, TK_EQ, TK_IMPL, TK_XOR, TK_AND, TK_OR, TK_RPAREN]
     7           | expression . TK_XOR expression
     8           | expression . TK_IMPL expression
     9           | expression . TK_EQ expression
 
-    TK_XOR  décalage et aller à l'état 13
-
-    TK_XOR    [réduction par utilisation de la règle 6 (expression)]
     $défaut  réduction par utilisation de la règle 6 (expression)
 
-    Conflit entre la règle 6 et le jeton TK_IMPL résolu par réduction (TK_IMPL < TK_NEG).
     Conflit entre la règle 6 et le jeton TK_EQ résolu par réduction (TK_EQ < TK_NEG).
+    Conflit entre la règle 6 et le jeton TK_IMPL résolu par réduction (TK_IMPL < TK_NEG).
+    Conflit entre la règle 6 et le jeton TK_XOR résolu par réduction (TK_XOR < TK_NEG).
     Conflit entre la règle 6 et le jeton TK_AND résolu par réduction (TK_AND < TK_NEG).
     Conflit entre la règle 6 et le jeton TK_OR résolu par réduction (TK_OR < TK_NEG).
 
@@ -191,8 +181,8 @@ expression (14)
     6           | . TK_NEG expression
     7           | . expression TK_XOR expression
     8           | . expression TK_IMPL expression
-    8           | expression TK_IMPL . expression
     9           | . expression TK_EQ expression
+    9           | expression TK_EQ . expression
 
     TK_LPAREN  décalage et aller à l'état 1
     TK_NEG     décalage et aller à l'état 2
@@ -210,8 +200,8 @@ expression (14)
     6           | . TK_NEG expression
     7           | . expression TK_XOR expression
     8           | . expression TK_IMPL expression
+    8           | expression TK_IMPL . expression
     9           | . expression TK_EQ expression
-    9           | expression TK_EQ . expression
 
     TK_LPAREN  décalage et aller à l'état 1
     TK_NEG     décalage et aller à l'état 2
@@ -226,9 +216,9 @@ expression (14)
     3           | . TK_LPAREN expression TK_RPAREN
     4           | . expression TK_OR expression
     5           | . expression TK_AND expression
-    5           | expression TK_AND . expression
     6           | . TK_NEG expression
     7           | . expression TK_XOR expression
+    7           | expression TK_XOR . expression
     8           | . expression TK_IMPL expression
     9           | . expression TK_EQ expression
 
@@ -244,8 +234,8 @@ expression (14)
     2 expression: . TK_BOOL
     3           | . TK_LPAREN expression TK_RPAREN
     4           | . expression TK_OR expression
-    4           | expression TK_OR . expression
     5           | . expression TK_AND expression
+    5           | expression TK_AND . expression
     6           | . TK_NEG expression
     7           | . expression TK_XOR expression
     8           | . expression TK_IMPL expression
@@ -263,10 +253,10 @@ expression (14)
     2 expression: . TK_BOOL
     3           | . TK_LPAREN expression TK_RPAREN
     4           | . expression TK_OR expression
+    4           | expression TK_OR . expression
     5           | . expression TK_AND expression
     6           | . TK_NEG expression
     7           | . expression TK_XOR expression
-    7           | expression TK_XOR . expression
     8           | . expression TK_IMPL expression
     9           | . expression TK_EQ expression
 
@@ -290,18 +280,16 @@ expression (14)
     5           | expression . TK_AND expression
     7           | expression . TK_XOR expression
     8           | expression . TK_IMPL expression
-    8           | expression TK_IMPL expression .  [$end, TK_IMPL, TK_EQ, TK_AND, TK_OR, TK_XOR, TK_RPAREN]
     9           | expression . TK_EQ expression
+    9           | expression TK_EQ expression .  [$end, TK_EQ, TK_IMPL, TK_XOR, TK_AND, TK_OR, TK_RPAREN]
 
-    TK_XOR  décalage et aller à l'état 13
+    $défaut  réduction par utilisation de la règle 9 (expression)
 
-    TK_XOR    [réduction par utilisation de la règle 8 (expression)]
-    $défaut  réduction par utilisation de la règle 8 (expression)
-
-    Conflit entre la règle 8 et le jeton TK_IMPL résolu par réduction (%left TK_IMPL).
-    Conflit entre la règle 8 et le jeton TK_EQ résolu par réduction (%left TK_EQ).
-    Conflit entre la règle 8 et le jeton TK_AND résolu par réduction (%left TK_AND).
-    Conflit entre la règle 8 et le jeton TK_OR résolu par réduction (%left TK_OR).
+    Conflit entre la règle 9 et le jeton TK_EQ résolu par réduction (%left TK_EQ).
+    Conflit entre la règle 9 et le jeton TK_IMPL résolu par réduction (%left TK_IMPL).
+    Conflit entre la règle 9 et le jeton TK_XOR résolu par réduction (%left TK_XOR).
+    Conflit entre la règle 9 et le jeton TK_AND résolu par réduction (%left TK_AND).
+    Conflit entre la règle 9 et le jeton TK_OR résolu par réduction (%left TK_OR).
 
 
 État 16
@@ -310,78 +298,67 @@ expression (14)
     5           | expression . TK_AND expression
     7           | expression . TK_XOR expression
     8           | expression . TK_IMPL expression
+    8           | expression TK_IMPL expression .  [$end, TK_EQ, TK_IMPL, TK_XOR, TK_AND, TK_OR, TK_RPAREN]
     9           | expression . TK_EQ expression
-    9           | expression TK_EQ expression .  [$end, TK_IMPL, TK_EQ, TK_AND, TK_OR, TK_XOR, TK_RPAREN]
 
-    TK_XOR  décalage et aller à l'état 13
+    $défaut  réduction par utilisation de la règle 8 (expression)
 
-    TK_XOR    [réduction par utilisation de la règle 9 (expression)]
-    $défaut  réduction par utilisation de la règle 9 (expression)
-
-    Conflit entre la règle 9 et le jeton TK_IMPL résolu par réduction (%left TK_IMPL).
-    Conflit entre la règle 9 et le jeton TK_EQ résolu par réduction (%left TK_EQ).
-    Conflit entre la règle 9 et le jeton TK_AND résolu par réduction (%left TK_AND).
-    Conflit entre la règle 9 et le jeton TK_OR résolu par réduction (%left TK_OR).
+    Conflit entre la règle 8 et le jeton TK_EQ résolu par réduction (%left TK_EQ).
+    Conflit entre la règle 8 et le jeton TK_IMPL résolu par réduction (%left TK_IMPL).
+    Conflit entre la règle 8 et le jeton TK_XOR résolu par réduction (%left TK_XOR).
+    Conflit entre la règle 8 et le jeton TK_AND résolu par réduction (%left TK_AND).
+    Conflit entre la règle 8 et le jeton TK_OR résolu par réduction (%left TK_OR).
 
 
 État 17
 
     4 expression: expression . TK_OR expression
     5           | expression . TK_AND expression
-    5           | expression TK_AND expression .  [$end, TK_IMPL, TK_EQ, TK_AND, TK_OR, TK_XOR, TK_RPAREN]
     7           | expression . TK_XOR expression
+    7           | expression TK_XOR expression .  [$end, TK_EQ, TK_IMPL, TK_XOR, TK_AND, TK_OR, TK_RPAREN]
     8           | expression . TK_IMPL expression
     9           | expression . TK_EQ expression
 
-    TK_XOR  décalage et aller à l'état 13
+    $défaut  réduction par utilisation de la règle 7 (expression)
 
-    TK_XOR    [réduction par utilisation de la règle 5 (expression)]
-    $défaut  réduction par utilisation de la règle 5 (expression)
-
-    Conflit entre la règle 5 et le jeton TK_IMPL résolu par réduction (%left TK_IMPL).
-    Conflit entre la règle 5 et le jeton TK_EQ résolu par réduction (%left TK_EQ).
-    Conflit entre la règle 5 et le jeton TK_AND résolu par réduction (%left TK_AND).
-    Conflit entre la règle 5 et le jeton TK_OR résolu par réduction (%left TK_OR).
+    Conflit entre la règle 7 et le jeton TK_EQ résolu par réduction (%left TK_EQ).
+    Conflit entre la règle 7 et le jeton TK_IMPL résolu par réduction (%left TK_IMPL).
+    Conflit entre la règle 7 et le jeton TK_XOR résolu par réduction (%left TK_XOR).
+    Conflit entre la règle 7 et le jeton TK_AND résolu par réduction (%left TK_AND).
+    Conflit entre la règle 7 et le jeton TK_OR résolu par réduction (%left TK_OR).
 
 
 État 18
 
     4 expression: expression . TK_OR expression
-    4           | expression TK_OR expression .  [$end, TK_IMPL, TK_EQ, TK_AND, TK_OR, TK_XOR, TK_RPAREN]
     5           | expression . TK_AND expression
+    5           | expression TK_AND expression .  [$end, TK_EQ, TK_IMPL, TK_XOR, TK_AND, TK_OR, TK_RPAREN]
     7           | expression . TK_XOR expression
     8           | expression . TK_IMPL expression
     9           | expression . TK_EQ expression
 
-    TK_XOR  décalage et aller à l'état 13
+    $défaut  réduction par utilisation de la règle 5 (expression)
 
-    TK_XOR    [réduction par utilisation de la règle 4 (expression)]
-    $défaut  réduction par utilisation de la règle 4 (expression)
-
-    Conflit entre la règle 4 et le jeton TK_IMPL résolu par réduction (%left TK_IMPL).
-    Conflit entre la règle 4 et le jeton TK_EQ résolu par réduction (%left TK_EQ).
-    Conflit entre la règle 4 et le jeton TK_AND résolu par réduction (%left TK_AND).
-    Conflit entre la règle 4 et le jeton TK_OR résolu par réduction (%left TK_OR).
+    Conflit entre la règle 5 et le jeton TK_EQ résolu par réduction (%left TK_EQ).
+    Conflit entre la règle 5 et le jeton TK_IMPL résolu par réduction (%left TK_IMPL).
+    Conflit entre la règle 5 et le jeton TK_XOR résolu par réduction (%left TK_XOR).
+    Conflit entre la règle 5 et le jeton TK_AND résolu par réduction (%left TK_AND).
+    Conflit entre la règle 5 et le jeton TK_OR résolu par réduction (%left TK_OR).
 
 
 État 19
 
     4 expression: expression . TK_OR expression
+    4           | expression TK_OR expression .  [$end, TK_EQ, TK_IMPL, TK_XOR, TK_AND, TK_OR, TK_RPAREN]
     5           | expression . TK_AND expression
     7           | expression . TK_XOR expression
-    7           | expression TK_XOR expression .  [$end, TK_IMPL, TK_EQ, TK_AND, TK_OR, TK_XOR, TK_RPAREN]
     8           | expression . TK_IMPL expression
     9           | expression . TK_EQ expression
 
-    TK_IMPL  décalage et aller à l'état 9
-    TK_EQ    décalage et aller à l'état 10
-    TK_AND   décalage et aller à l'état 11
-    TK_OR    décalage et aller à l'état 12
-    TK_XOR   décalage et aller à l'état 13
+    $défaut  réduction par utilisation de la règle 4 (expression)
 
-    TK_IMPL   [réduction par utilisation de la règle 7 (expression)]
-    TK_EQ     [réduction par utilisation de la règle 7 (expression)]
-    TK_AND    [réduction par utilisation de la règle 7 (expression)]
-    TK_OR     [réduction par utilisation de la règle 7 (expression)]
-    TK_XOR    [réduction par utilisation de la règle 7 (expression)]
-    $défaut  réduction par utilisation de la règle 7 (expression)
+    Conflit entre la règle 4 et le jeton TK_EQ résolu par réduction (%left TK_EQ).
+    Conflit entre la règle 4 et le jeton TK_IMPL résolu par réduction (%left TK_IMPL).
+    Conflit entre la règle 4 et le jeton TK_XOR résolu par réduction (%left TK_XOR).
+    Conflit entre la règle 4 et le jeton TK_AND résolu par réduction (%left TK_AND).
+    Conflit entre la règle 4 et le jeton TK_OR résolu par réduction (%left TK_OR).

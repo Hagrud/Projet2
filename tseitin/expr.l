@@ -3,8 +3,10 @@
 #include <cstdlib>
 using namespace std;
 #define YY_DECL extern "C" int yylex()
+#define YY_NO_UNPUT
 
 #include "expr.tab.hpp"
+
 %}
 %%
 [ \t]         ;

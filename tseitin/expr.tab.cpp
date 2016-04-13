@@ -62,7 +62,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 1 "expr.ypp" /* yacc.c:339  */
+#line 1 "tseitin/expr.ypp" /* yacc.c:339  */
 
 #include <cstdio>
 #include <iostream>
@@ -77,7 +77,7 @@ void yyerror(const char *s);
 
 Expr *res = NULL;
 
-#line 81 "expr.tab.cpp" /* yacc.c:339  */
+#line 81 "tseitin/expr.tab.cpp" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -97,8 +97,8 @@ Expr *res = NULL;
 
 /* In a future release of Bison, this section will be replaced
    by #include "expr.tab.hpp".  */
-#ifndef YY_YY_EXPR_TAB_HPP_INCLUDED
-# define YY_YY_EXPR_TAB_HPP_INCLUDED
+#ifndef YY_YY_TSEITIN_EXPR_TAB_HPP_INCLUDED
+# define YY_YY_TSEITIN_EXPR_TAB_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -112,11 +112,11 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    TK_IMPL = 258,
-    TK_EQ = 259,
-    TK_AND = 260,
-    TK_OR = 261,
-    TK_XOR = 262,
+    TK_EQ = 258,
+    TK_IMPL = 259,
+    TK_XOR = 260,
+    TK_AND = 261,
+    TK_OR = 262,
     TK_LPAREN = 263,
     TK_RPAREN = 264,
     TK_NEG = 265,
@@ -129,12 +129,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 21 "expr.ypp" /* yacc.c:355  */
+#line 21 "tseitin/expr.ypp" /* yacc.c:355  */
 
     int ival;
     class Expr *exp;
 
-#line 138 "expr.tab.cpp" /* yacc.c:355  */
+#line 138 "tseitin/expr.tab.cpp" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -147,11 +147,11 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_EXPR_TAB_HPP_INCLUDED  */
+#endif /* !YY_YY_TSEITIN_EXPR_TAB_HPP_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 155 "expr.tab.cpp" /* yacc.c:358  */
+#line 155 "tseitin/expr.tab.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -449,8 +449,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    45,    45,    49,    50,    51,    52,    53,    54,    55,
-      56
+       0,    46,    46,    50,    51,    52,    53,    54,    55,    56,
+      57
 };
 #endif
 
@@ -459,8 +459,8 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "TK_IMPL", "TK_EQ", "TK_AND", "TK_OR",
-  "TK_XOR", "TK_LPAREN", "TK_RPAREN", "TK_NEG", "TK_BOOL", "$accept",
+  "$end", "error", "$undefined", "TK_EQ", "TK_IMPL", "TK_XOR", "TK_AND",
+  "TK_OR", "TK_LPAREN", "TK_RPAREN", "TK_NEG", "TK_BOOL", "$accept",
   "input", "expression", YY_NULLPTR
 };
 #endif
@@ -489,8 +489,8 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      12,    12,    12,    -2,     2,     0,    10,    11,    -2,    12,
-      12,    12,    12,    12,    -2,    11,    11,    11,    11,     0
+      12,    12,    12,    -2,     2,     0,    10,    -2,    -2,    12,
+      12,    12,    12,    12,    -2,    -2,    -2,    -2,    -2,    -2
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -499,7 +499,7 @@ static const yytype_int8 yypact[] =
 static const yytype_uint8 yydefact[] =
 {
        0,     0,     0,     3,     0,     2,     0,     7,     1,     0,
-       0,     0,     0,     0,     4,     9,    10,     6,     5,     8
+       0,     0,     0,     0,     4,    10,     9,     8,     6,     5
 };
 
   /* YYPGOTO[NTERM-NUM].  */
@@ -520,14 +520,14 @@ static const yytype_int8 yydefgoto[] =
 static const yytype_uint8 yytable[] =
 {
        6,     7,     8,     9,    10,    11,    12,    13,    15,    16,
-      17,    18,    19,     9,    10,    11,    12,    13,    13,    14,
+      17,    18,    19,     9,    10,    11,    12,    13,     0,    14,
        1,     0,     2,     3
 };
 
 static const yytype_int8 yycheck[] =
 {
        1,     2,     0,     3,     4,     5,     6,     7,     9,    10,
-      11,    12,    13,     3,     4,     5,     6,     7,     7,     9,
+      11,    12,    13,     3,     4,     5,     6,     7,    -1,     9,
        8,    -1,    10,    11
 };
 
@@ -1227,61 +1227,61 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 45 "expr.ypp" /* yacc.c:1646  */
+#line 46 "tseitin/expr.ypp" /* yacc.c:1646  */
     { res = (yyvsp[0].exp); }
-#line 1233 "expr.tab.cpp" /* yacc.c:1646  */
+#line 1233 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 49 "expr.ypp" /* yacc.c:1646  */
+#line 50 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new EConst((yyvsp[0].ival));                       }
-#line 1239 "expr.tab.cpp" /* yacc.c:1646  */
+#line 1239 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 50 "expr.ypp" /* yacc.c:1646  */
+#line 51 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = (yyvsp[-1].exp);                                      }
-#line 1245 "expr.tab.cpp" /* yacc.c:1646  */
+#line 1245 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 51 "expr.ypp" /* yacc.c:1646  */
+#line 52 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new EOr((yyvsp[-2].exp), (yyvsp[0].exp));                }
-#line 1251 "expr.tab.cpp" /* yacc.c:1646  */
+#line 1251 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 52 "expr.ypp" /* yacc.c:1646  */
+#line 53 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new EAnd((yyvsp[-2].exp), (yyvsp[0].exp));                }
-#line 1257 "expr.tab.cpp" /* yacc.c:1646  */
+#line 1257 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 53 "expr.ypp" /* yacc.c:1646  */
+#line 54 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new ENeg((yyvsp[0].exp)); }
-#line 1263 "expr.tab.cpp" /* yacc.c:1646  */
+#line 1263 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 54 "expr.ypp" /* yacc.c:1646  */
-    { (yyval.exp) = new EOr(new EAnd(new ENeg((yyvsp[-2].exp)), (yyvsp[0].exp)), new EAnd((yyvsp[-2].exp), new ENeg((yyvsp[0].exp)))); }
-#line 1269 "expr.tab.cpp" /* yacc.c:1646  */
+#line 55 "tseitin/expr.ypp" /* yacc.c:1646  */
+    { (yyval.exp) = new EAnd(new EOr((yyvsp[-2].exp), (yyvsp[0].exp)), new ENeg(new EAnd((yyvsp[-2].exp), (yyvsp[0].exp)))); }
+#line 1269 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 55 "expr.ypp" /* yacc.c:1646  */
+#line 56 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new EOr(new ENeg((yyvsp[-2].exp)), (yyvsp[0].exp)); }
-#line 1275 "expr.tab.cpp" /* yacc.c:1646  */
+#line 1275 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 56 "expr.ypp" /* yacc.c:1646  */
+#line 57 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new EOr(new EAnd((yyvsp[-2].exp), (yyvsp[0].exp)), new EAnd(new ENeg((yyvsp[-2].exp)), new ENeg((yyvsp[0].exp)))); }
-#line 1281 "expr.tab.cpp" /* yacc.c:1646  */
+#line 1281 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 1285 "expr.tab.cpp" /* yacc.c:1646  */
+#line 1285 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1509,5 +1509,5 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 58 "expr.ypp" /* yacc.c:1906  */
+#line 59 "tseitin/expr.ypp" /* yacc.c:1906  */
 

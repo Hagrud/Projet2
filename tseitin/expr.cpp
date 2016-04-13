@@ -6,7 +6,9 @@ using namespace std;
 /**********  Constants   ***********/
 /***********************************/
 
-EConst::EConst(int val) : value(val) {}
+EConst::EConst(int val) : value(val) {
+    cout << "creating " << val << endl;
+}
 
 string EConst::to_string()
 {
@@ -16,8 +18,9 @@ string EConst::to_string()
     return result;
 }
 
-string EConst::to_cnf()
-{    
+string EConst::to_cnf(int& var_count, int& clause_count)
+{
+    var_count = value;
     ostringstream oss;
     oss << value;
     string result = oss.str();
@@ -29,14 +32,36 @@ int EConst::eval()
     return value;
 }
 
-Expr * EConst::tseitin(int max_var, vector<Expr*>& exprs)
+Expr * EConst::tseitin(int& max_var, vector<Expr*>& exprs)
 {
-    return this;
+    cout << "ECONST : ";
+    max_var++;
+    
+    Expr* xi = new EConst(max_var);
+
+    Expr * xin = new ENeg(xi);
+
+    Expr * thisn = new ENeg(this);
+    
+    exprs.push_back(
+	new EAnd(
+	    new EOr(
+		xin,
+		this
+		),
+	    new EOr(
+		xi,
+		thisn
+		)
+	    )
+	);
+
+    return xi;
 }
 
-void EConst::get_vars(set<Expr*>& vars)
+void EConst::get_vars(set<int>& vars)
 {
-    vars.insert(this);
+    vars.insert(value);
 }
 
 /***********************************/
@@ -50,9 +75,9 @@ string EOr::to_string()
     return "(" + op1->to_string() + " \\/ " +  op2->to_string() + ")";
 }
 
-string EOr::to_cnf()
+string EOr::to_cnf(int& var_count, int& clause_count)
 {
-    return op1->to_cnf() + " " + op2->to_cnf();
+    return op1->to_cnf(var_count, clause_count) + " " + op2->to_cnf(var_count, clause_count);
 }
 
 int EOr::eval()
@@ -60,19 +85,20 @@ int EOr::eval()
     return op1->eval() || op2->eval();
 }
 
-Expr * EOr::tseitin(int max_var, vector<Expr*>& exprs)
+Expr * EOr::tseitin(int& max_var, vector<Expr*>& exprs)
 {
+    cout << "EOR : ";
     max_var++;
 
+    Expr* xi = new EConst(max_var);
+
+    Expr * xin = new ENeg(xi);
+    
     Expr * op1t = op1->tseitin(max_var, exprs);
     Expr * op2t = op2->tseitin(max_var, exprs);
 
     Expr * op1tn = new ENeg(op1t);
     Expr * op2tn = new ENeg(op2t);
-
-    Expr* xi = new EConst(max_var);
-
-    Expr * xin = new ENeg(xi);
         
     exprs.push_back(
 	new EAnd(
@@ -100,7 +126,7 @@ Expr * EOr::tseitin(int max_var, vector<Expr*>& exprs)
 		    
 }
 
-void EOr::get_vars(set<Expr*>& vars)
+void EOr::get_vars(set<int>& vars)
 {
     op1->get_vars(vars);
     op2->get_vars(vars);
@@ -117,9 +143,10 @@ string EAnd::to_string()
     return "(" + op1->to_string() + " /\\ " +  op2->to_string() + ")";
 }
 
-string EAnd::to_cnf()
+string EAnd::to_cnf(int& var_count, int& clause_count)
 {
-    return op1->to_cnf() + "\n" + op2->to_cnf();
+    clause_count++;
+    return op1->to_cnf(var_count, clause_count) + "\n" + op2->to_cnf(var_count, clause_count);
 }
 
 int EAnd::eval()
@@ -127,19 +154,20 @@ int EAnd::eval()
     return op1->eval() && op2->eval();
 }
 
-Expr * EAnd::tseitin(int max_var, vector<Expr*>& exprs)
+Expr * EAnd::tseitin(int& max_var, vector<Expr*>& exprs)
 {
+    cout << "EAND : ";
     max_var++;
+
+    Expr* xi = new EConst(max_var);
+
+    Expr * xin = new ENeg(xi);
 
     Expr * op1t = op1->tseitin(max_var, exprs);
     Expr * op2t = op2->tseitin(max_var, exprs);
 
     Expr * op1tn = new ENeg(op1t);
     Expr * op2tn = new ENeg(op2t);
-
-    Expr* xi = new EConst(max_var);
-
-    Expr * xin = new ENeg(xi);
         
     exprs.push_back(
 	new EAnd(
@@ -155,7 +183,7 @@ Expr * EAnd::tseitin(int max_var, vector<Expr*>& exprs)
 		),
 	    new EOr(
 		new EOr(
-		    xin,
+		    xi,
 		    op1tn
 		    ),
 		op2tn
@@ -166,7 +194,7 @@ Expr * EAnd::tseitin(int max_var, vector<Expr*>& exprs)
     return xi;
 }
 
-void EAnd::get_vars(set<Expr*>& vars)
+void EAnd::get_vars(set<int>& vars)
 {
     op1->get_vars(vars);
     op2->get_vars(vars);
@@ -183,9 +211,9 @@ string ENeg::to_string()
     return "(-" + op1->to_string() + ")";
 }
 
-string ENeg::to_cnf()
+string ENeg::to_cnf(int& var_count, int& clause_count)
 {
-    return "-" + op1->to_cnf();
+    return "-" + op1->to_cnf(var_count, clause_count);
 }
 
 int ENeg::eval()
@@ -193,27 +221,28 @@ int ENeg::eval()
     return !op1->eval();
 }
 
-Expr * ENeg::tseitin(int max_var, vector<Expr*>& exprs)
+Expr * ENeg::tseitin(int& max_var, vector<Expr*>& exprs)
 {
-    max_var++;
-
-    Expr * op1t = op1->tseitin(max_var, exprs);
-
-    Expr * op1tn = new ENeg(op1t);
+    cout << "ENEG : ";
+    max_var++;    
 
     Expr* xi = new EConst(max_var);
 
     Expr * xin = new ENeg(xi);
+
+    Expr * op1t = op1->tseitin(max_var, exprs);
+
+    Expr * op1tn = new ENeg(op1t);
         
     exprs.push_back(
 	new EAnd(
 	    new EOr(
 		xin,
-		new ENeg(op1)
+		op1tn
 		),
 	    new EOr(
 		xi,
-		op1
+		op1t
 		)
 	    )
 	);
@@ -221,7 +250,7 @@ Expr * ENeg::tseitin(int max_var, vector<Expr*>& exprs)
     return xi;
 }
 
-void ENeg::get_vars(set<Expr*>& vars)
+void ENeg::get_vars(set<int>& vars)
 {
     op1->get_vars(vars);
 }

@@ -1,6 +1,6 @@
-#line 2 "expr.yy.c"
+#line 2 "tseitin/expr.yy.c"
 
-#line 4 "expr.yy.c"
+#line 4 "tseitin/expr.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -474,15 +474,17 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "expr.l"
-#line 2 "expr.l"
+#line 1 "tseitin/expr.l"
+#line 2 "tseitin/expr.l"
 #include <iostream>
 #include <cstdlib>
 using namespace std;
 #define YY_DECL extern "C" int yylex()
+#define YY_NO_UNPUT
 
 #include "expr.tab.hpp"
-#line 486 "expr.yy.c"
+
+#line 488 "tseitin/expr.yy.c"
 
 #define INITIAL 0
 
@@ -700,9 +702,9 @@ YY_DECL
 		}
 
 	{
-#line 9 "expr.l"
+#line 11 "tseitin/expr.l"
 
-#line 706 "expr.yy.c"
+#line 708 "tseitin/expr.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -761,76 +763,76 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 10 "expr.l"
+#line 12 "tseitin/expr.l"
 ;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 11 "expr.l"
+#line 13 "tseitin/expr.l"
 { yylval.ival = atoi(yytext); return TK_BOOL; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 12 "expr.l"
+#line 14 "tseitin/expr.l"
 { return TK_LPAREN; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 13 "expr.l"
+#line 15 "tseitin/expr.l"
 { return TK_RPAREN; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 14 "expr.l"
+#line 16 "tseitin/expr.l"
 { return TK_OR; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 15 "expr.l"
+#line 17 "tseitin/expr.l"
 { return TK_AND; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 16 "expr.l"
+#line 18 "tseitin/expr.l"
 { return TK_XOR; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 17 "expr.l"
+#line 19 "tseitin/expr.l"
 { return TK_IMPL; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 18 "expr.l"
+#line 20 "tseitin/expr.l"
 { return TK_EQ; }
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 19 "expr.l"
+#line 21 "tseitin/expr.l"
 { return TK_AND; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 20 "expr.l"
+#line 22 "tseitin/expr.l"
 { return TK_NEG; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 21 "expr.l"
+#line 23 "tseitin/expr.l"
 { return TK_NEG; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 22 "expr.l"
+#line 24 "tseitin/expr.l"
 ;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 23 "expr.l"
+#line 25 "tseitin/expr.l"
 ECHO;
 	YY_BREAK
-#line 834 "expr.yy.c"
+#line 836 "tseitin/expr.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1505,7 +1507,7 @@ static void yyensure_buffer_stack (void)
 		 * scanner will even need a stack. We use 2 instead of 1 to avoid an
 		 * immediate realloc on the next call.
          */
-		num_to_alloc = 1; // After all that talk, this was set to 1 anyways...
+      num_to_alloc = 1; /* After all that talk, this was set to 1 anyways... */
 		(yy_buffer_stack) = (struct yy_buffer_state**)yyalloc
 								(num_to_alloc * sizeof(struct yy_buffer_state*)
 								);
@@ -1831,7 +1833,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 23 "expr.l"
+#line 25 "tseitin/expr.l"
 
 
 

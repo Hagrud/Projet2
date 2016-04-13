@@ -18,10 +18,10 @@ class Expr
 public:
     Expr(){}
     virtual std::string to_string()=0;
-    virtual std::string to_cnf()=0;
+    virtual std::string to_cnf(int& var_count, int& clause_count)=0;
     virtual int eval()=0;
-    virtual Expr * tseitin(int max_var, vector<Expr*>& exprs)=0;
-    virtual void get_vars(set<Expr*>& vars)=0;
+    virtual Expr * tseitin(int& max_var, vector<Expr*>& exprs)=0;
+    virtual void get_vars(set<int>& vars)=0;
 };
 
 /***********************************/
@@ -33,10 +33,10 @@ class EConst : public Expr
 public:
     EConst(int val); 
     virtual std::string to_string();
-    virtual std::string to_cnf();
+    virtual std::string to_cnf(int& var_count, int& clause_count);
     virtual int eval();
-    virtual Expr * tseitin(int max_var, vector<Expr*>& exprs);
-    virtual void get_vars(set<Expr*>& vars);
+    virtual Expr * tseitin(int& max_var, vector<Expr*>& exprs);
+    virtual void get_vars(set<int>& vars);
     static int nb_var;
 private:
     int value;
@@ -51,10 +51,10 @@ class EOr : public Expr
 public:
     EOr(Expr * e1, Expr * e2);
     virtual std::string to_string();
-    virtual std::string to_cnf();
+    virtual std::string to_cnf(int& var_count, int& clause_count);
     virtual int eval();
-    virtual Expr * tseitin(int max_var, vector<Expr*>& exprs);
-    virtual void get_vars(set<Expr*>& vars);
+    virtual Expr * tseitin(int& max_var, vector<Expr*>& exprs);
+    virtual void get_vars(set<int>& vars);
 private:
     Expr * op1, * op2;
 };
@@ -68,10 +68,10 @@ class EAnd : public Expr
 public:
     EAnd(Expr * e1, Expr * e2);
     virtual std::string to_string();
-    virtual std::string to_cnf();
+    virtual std::string to_cnf(int& var_count, int& clause_count);
     virtual int eval();
-    virtual Expr * tseitin(int max_var, vector<Expr*>& exprs);
-    virtual void get_vars(set<Expr*>& vars);
+    virtual Expr * tseitin(int& max_var, vector<Expr*>& exprs);
+    virtual void get_vars(set<int>& vars);
 private:
     Expr * op1, * op2;
 };
@@ -85,10 +85,10 @@ class ENeg : public Expr
 public:
     ENeg(Expr * e1);
     virtual std::string to_string();
-    virtual std::string to_cnf();
+    virtual std::string to_cnf(int& var_count, int& clause_count);
     virtual int eval();
-    virtual Expr * tseitin(int max_var, vector<Expr*>& exprs);
-    virtual void get_vars(set<Expr*>& vars);
+    virtual Expr * tseitin(int& max_var, vector<Expr*>& exprs);
+    virtual void get_vars(set<int>& vars);
 private:
     Expr * op1;
 };
