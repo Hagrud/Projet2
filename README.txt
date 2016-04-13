@@ -21,6 +21,12 @@ Structures de données :
 													à revérifier toutes les clauses à chaque recherche de clauses unitaire.
     -vector<vector<int>> deductions_clauses	:	Tableau de tableau d'entier pour stocker les clauses validé par chaques variables pariées.
 
+Pour la transformation de Tseitin :
+    -utilisation du lexer et transformation de l'expression obtenue
+    -on remonte récursivement jusqu'aux variables en rajoutant une nouvelle variable à chaque sous expression
+    -on utilise un std::set pour récupérer toutes les variables et les comptes
+    -on crée un vector<Expr*> qui correspond aux expressions que l'on obtient à la fin de la transformation
+
 Répartition du travail:
 	Parser/Tseitin: Mangold Paul 
 	DPLL: Polet Pierre-Etienne

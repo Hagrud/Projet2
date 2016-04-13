@@ -15,7 +15,8 @@ extern "C" FILE *yyin;
 extern Expr *res;
     
 
-
+#include "dpll/paris.h"
+#include "dpll/graph.h"
 
 using namespace std;
 
@@ -31,3 +32,6 @@ char* lire_args(int argc, char* argv[]);
 void reponse(vector<vector<int>>& clauses,vector<bool>& rep);
 
 char* create_tseitin(char* file);
+bool get_option(string option);
+
+void init();

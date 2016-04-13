@@ -8,11 +8,12 @@ struct Option {
 };
 
 static Option options[] = {
-    {"Dynamic Largest Individual Sum",                  "-dlis",    false},
-    {"Maximum Occurrences in clauses of Minimum Size",  "-moms",    false},
-    {"Random",                                          "-rand",    false},
-    {"Tseitin",                                         "-tseitin", false},
-    {"watched literals",                                "-wl",      false},
+    {"Dynamic Largest Individual Sum",                  "-dlis",   		false},
+    {"Maximum Occurrences in clauses of Minimum Size",  "-moms",    	false},
+    {"Random",                                          "-rand",    	false},
+    {"Tseitin",                                         "-tseitin", 	false},
+	{"Exploration de conflit",							"-cl-interac", 	false},
+    {"watched literals",                                "-wl",      	false},
     {"", "", false}};
 
 
@@ -28,11 +29,19 @@ int main(int argc, char* argv[]){
     pair<vector<vector<int>>,int> parsed = parse(file);
     vector<vector<int>> clauses = parsed.first;
 
+	//cout << "clauses :: [" << endl;
+    //for(auto c:clauses){cout << "[ ";for(auto p:c){cout << p << " ";}cout << "]" << endl;}
+	//cout << "]" << endl;
+
+
+
     if(parsed.second==0){   //Si on n'a pas de variable il y a une erreur.
-        return 1;
+		cout << "s SATISFIABLE" << endl;
+        return 0;
     }
 
-    vector<bool> rep = dpll(clauses, parsed.second);
+	init();
+    vector<bool> rep = dpll(clauses, parsed.second, !(get_option("cl-interac") || get_option("wl")));
     //vector<bool> rep = dpll_naif(clauses, parsed.second);
     reponse(clauses, rep);
 
@@ -153,9 +162,24 @@ char* create_tseitin(char* file)
     return file;
 }
 
-
 void yyerror(const char *s) {
     cout << "EEK, parse error!  Message: " << s << endl;
     // might as well halt now:
     exit(-1);
+}
+
+bool get_option(string option){
+	option = "-" + option;
+	Option *opt;
+    for(opt = options; opt->name != ""; opt++){//On vérifie si l'argument est une option connu.
+    	if(opt->id == option){
+        	return opt->active;
+		}
+	}
+	return false;
+}
+
+void init(){
+	set_option(get_option("rand"), get_option("moms"));
+	init_graph_cpp(get_option("cl-interac"));
 }
