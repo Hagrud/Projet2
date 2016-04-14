@@ -1,4 +1,4 @@
-CPPFLAGS = -Wall -std=c++11 -g -Wno-write-strings
+CPPFLAGS = -Wall -std=gnu++11 -g -Wno-write-strings
 EXEC = resol
 CC = g++
 LIBLEX=-lfl
@@ -8,7 +8,7 @@ NAME=expr
 
 
 all: dpll/*.cpp main.cpp *.cpp tseitin/$(NAME).tab.cpp tseitin/$(NAME).yy.c tseitin/$(NAME).cpp
-	$(CC) -std=c++11 -g -Wall -Wno-write-strings -o resol $^ $(LIBLEX)
+	$(CC) -std=gnu++11 -g -Wall -Wno-write-strings -o resol $^ $(LIBLEX)
 
 color:
 
