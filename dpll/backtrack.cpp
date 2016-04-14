@@ -62,6 +62,9 @@ bool conflit_graph(vector<vector<int>>& clauses,    vector<int>& paris,
 			   vector<int>& source_deduction,   vector<bool>& varsStatesBool,
 			   int nV){
 
+    if(paris.empty())
+        return true;
+
 	unsigned int conflit = get_clause_issue_id();
 
     /** Construction du graphe **/
@@ -72,11 +75,21 @@ bool conflit_graph(vector<vector<int>>& clauses,    vector<int>& paris,
     int uip = abs(paris.back());     //getUIP(graph);
 
     /** Affichage du graphe (si besoin) **/
-	check_conflict(graph, deductions.back(), paris, varsStates, uip);
+	check_conflict(graph, deductions.back(), varsStates, paris,  uip);
+
+    //cout << "deduction = [";
+    //for(int p:deductions.back()){cout << p << " ";} cout << "]" << endl;
+    //cout << "clause conflit = [";
+    //for(int p:clauses[conflit]){cout << p << " ";} cout << "]" << endl;
+    //cout << "graph = [";
+    //for(auto d:graph){cout << endl << " [";for(int p:d){cout << " " << p << " ";}cout << "]";}cout <<"]";
 
 	/** Clause learning **/
-    //deduct_clause(graph, clauses, varsStates, uip);
-    //clauses_valides.push_back(false);
+	if(deductions.back().size() != 0){   //On ajoute pas de clause si on a eu aucunes déductions avant le conflit.
+    //        deduct_clause(graph, clauses, varsStates, uip);
+    //        clauses_valides.push_back(false);
+	}
+
 
 	return true;
 }
@@ -111,7 +124,6 @@ void deduct_clause(vector<vector<int>>& graph, vector<vector<int>>& clauses, vec
 
     for(unsigned int sommet_id = 1; sommet_id<graph.size(); sommet_id++){
         for(int sommet:graph[sommet_id]){
-                cout << "pass" << endl;
                 if((find(vue.begin(), vue.end(), -sommet) != vue.end()) && sommet_id != (unsigned) uip){
                     if(varsStates[sommet_id]==0)
                         clause.push_back(sommet_id);
@@ -121,15 +133,15 @@ void deduct_clause(vector<vector<int>>& graph, vector<vector<int>>& clauses, vec
                 }
         }
     }
-    clause.push_back(uip);
+    clause.push_back(-uip);
 
     //cout << "vue : [ ";
     //for(int p:vue){cout << p << " ";} cout << "]" << endl;
     //cout << "uip = " << uip << endl;
     //cout << "graph = [";
     //for(auto d:graph){cout << endl << " [";for(int p:d){cout << " " << p << " ";}cout << "]";}cout <<"]";
-    //cout << "add clause : [ ";
-    //for(int p:clause){cout << p << " ";} cout << "]" << endl;
+    cout << "add clause : [ ";
+    for(int p:clause){cout << p << " ";} cout << "]" << endl;
 
     clauses.push_back(clause);
 }

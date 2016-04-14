@@ -35,10 +35,11 @@ void check_conflict(vector<vector<int>>& graph, vector<int>& deduction, vector<i
 
 
 void generate_conflict_graph(vector<vector<int>>& graph, vector<int>& deduction, vector<int>& varsStates, vector<int>& paris, int uip){
+
+
 	ofstream fichier("conflit_graph.dot", ios::out | ios::trunc);
 	 if(fichier)
         {
-				cout << "paris " << paris.back() << endl;
                 fichier << "digraph G {" << endl;
 				fichier << "conflit  [style=filled,color=red];" << endl;
 
@@ -51,11 +52,16 @@ void generate_conflict_graph(vector<vector<int>>& graph, vector<int>& deduction,
 
 				for(unsigned int sommet_id = 0; sommet_id<graph.size(); sommet_id++){
 					vector<int> sommet = graph[sommet_id];
+
+					int sommet_value = sommet_id;
+					if(varsStates[sommet_id-1]==0)
+                        sommet_value = -sommet_id;
+
 					for(int cible:sommet){
 						if(cible==0)
-							fichier << sommet_id << "->conflit;" << endl;
+							fichier << sommet_value << "->conflit;" << endl;
 						else
-							fichier << sommet_id << "->" << cible << ";" << endl;
+							fichier << sommet_value << "->" << cible << ";" << endl;
 					}
 				}
 

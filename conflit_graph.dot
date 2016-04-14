@@ -1,7 +1,15 @@
 digraph G {
 conflit  [style=filled,color=red];
-14 [style=filled,color=yellow];
-4->conflit;
-9->conflit;
-13->conflit;
+-11 [style=filled,color=cyan];
+-12 [style=filled,color=cyan];
+9 [style=filled,color=yellow];
+3->conflit;
+4->11;
+4->12;
+-11->conflit;
+-12->conflit;
+18->11;
+18->12;
+19->11;
+19->12;
 }
