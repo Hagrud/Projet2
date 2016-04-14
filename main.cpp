@@ -134,8 +134,6 @@ char* create_tseitin(char* file)
     {
 	clause_count++;
 
-	cout << exprs[i]->to_string() << endl;
-	
 	result += exprs[i]->to_cnf(cur_var_count, clause_count);
 	var_count = max(cur_var_count, var_count);
 	cur_var_count = 0;
@@ -157,8 +155,6 @@ char* create_tseitin(char* file)
     myfile << "p cnf " << var_count << " " << clause_count << endl;
     myfile << result;
 
-    cout << "p cnf " << var_count << " " << clause_count << endl << result;
-    
     return file;
 }
 

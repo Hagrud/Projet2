@@ -6,9 +6,7 @@ using namespace std;
 /**********  Constants   ***********/
 /***********************************/
 
-EConst::EConst(int val) : value(val) {
-    cout << "creating " << val << endl;
-}
+EConst::EConst(int val) : value(val) {}
 
 string EConst::to_string()
 {
@@ -34,7 +32,6 @@ int EConst::eval()
 
 Expr * EConst::tseitin(int& max_var, vector<Expr*>& exprs)
 {
-    cout << "ECONST : ";
     max_var++;
     
     Expr* xi = new EConst(max_var);
@@ -87,7 +84,6 @@ int EOr::eval()
 
 Expr * EOr::tseitin(int& max_var, vector<Expr*>& exprs)
 {
-    cout << "EOR : ";
     max_var++;
 
     Expr* xi = new EConst(max_var);
@@ -156,7 +152,6 @@ int EAnd::eval()
 
 Expr * EAnd::tseitin(int& max_var, vector<Expr*>& exprs)
 {
-    cout << "EAND : ";
     max_var++;
 
     Expr* xi = new EConst(max_var);
@@ -223,7 +218,6 @@ int ENeg::eval()
 
 Expr * ENeg::tseitin(int& max_var, vector<Expr*>& exprs)
 {
-    cout << "ENEG : ";
     max_var++;    
 
     Expr* xi = new EConst(max_var);
