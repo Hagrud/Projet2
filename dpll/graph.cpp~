@@ -49,7 +49,7 @@ void generate_conflict_graph(vector<vector<int>>& graph, vector<int>& deduction,
 				}
 				fichier << uip << " [style=filled,color=yellow];" << endl;
 
-				for(unsigned int sommet_id = 1; sommet_id<graph.size(); sommet_id++){
+				for(unsigned int sommet_id = 0; sommet_id<graph.size(); sommet_id++){
 					vector<int> sommet = graph[sommet_id];
 
 					int sommet_value = sommet_id;
