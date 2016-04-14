@@ -20,8 +20,12 @@ bool conflit_graph(vector<vector<int>>& clauses,    vector<int>& paris,
 			   vector<int>& source_deduction,   vector<bool>& varsStatesBool,
 			   int nV);
 
-void construct_graph_recur(vector<vector<int>>& clauses, 
-						   vector<int>& deduction, 
+int getUIP(vector<vector<int>>& graph);
+
+void deduct_clause(vector<vector<int>>& graph, vector<vector<int>>& clauses, vector<int>& varsStates, int uip);
+
+void construct_graph_recur(vector<vector<int>>& clauses,
+						   vector<int>& deduction,
 						   vector<vector<int>>& graph,
-						   vector<int>& source_deduction, 
+						   vector<int>& source_deduction,
 						   int clause_id, int var_id);

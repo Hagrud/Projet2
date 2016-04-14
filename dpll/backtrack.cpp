@@ -8,6 +8,7 @@ bool backtrack(vector<vector<int>>& clauses,    vector<int>& paris,
 
         /** On vérifie si le paris que l'on a fait est plausible. **/
         if(!checkWithNull(clauses, varsStates)){
+
 			if(!nwl){
 				conflit_graph(clauses, paris, deductions, varsStates, clauses_valides, deductions_clauses,
 			   source_deduction, varsStatesBool, nV);
@@ -50,39 +51,93 @@ bool backtrack(vector<vector<int>>& clauses,    vector<int>& paris,
         return false;
 }
 
+
+
+
+
+
 bool conflit_graph(vector<vector<int>>& clauses,    vector<int>& paris,
                vector<vector<int>>& deductions, vector<int>& varsStates,
                vector<bool>& clauses_valides,   vector<vector<int>>& deductions_clauses,
 			   vector<int>& source_deduction,   vector<bool>& varsStatesBool,
 			   int nV){
 	unsigned int conflit = get_clause_issue_id();
-	//int var_conflict = 0;
 
-	//for(int var:clauses[conflit]){
-	//	cout << var << endl;
-	//	if(find(deductions.back().begin(), deductions.back().end(), -var) != deductions.back().end()){
-	//		var_conflict = var;
-	//		break;
-	//	}
-	//}
-
+        //Construction du graphe
 	vector<vector<int>> graph(nV+1, vector<int>());
 	construct_graph_recur(clauses, deductions.back(), graph, source_deduction, conflit, 0);
-	check_conflict(graph, deductions.back(), paris, varsStates);
-	//cout << "var conflict :: " << var_conflict << endl;
+
+    int uip = abs(paris.back());            //getUIP(graph);
+
+
+	check_conflict(graph, deductions.back(), paris, varsStates, uip);
+    //deduct_clause(graph, clauses, varsStates, uip);
+    //clauses_valides.push_back(false);
+
 	return true;
 }
 
-void construct_graph_recur(vector<vector<int>>& clauses, 
-						   vector<int>& deduction, 
+int getUIP(vector<vector<int>>& graph){
+    return 0;
+}
+
+void deduct_clause(vector<vector<int>>& graph, vector<vector<int>>& clauses, vector<int>& varsStates,int uip){
+    vector<int> a_voir;
+    vector<int> vue;
+    vector<int> clause;
+
+    clause.resize(0);
+    a_voir.resize(0);
+    vue.resize(0);
+
+    a_voir.push_back(uip);
+    vue.push_back(0);
+    while(!a_voir.empty()){
+        int sommet  = a_voir.back();
+        a_voir.pop_back();
+        if(!(find(vue.begin(), vue.end(), sommet) != vue.end())){
+            vue.push_back(sommet);
+            for(int voisin:graph[sommet]){
+                    a_voir.push_back(voisin);
+            }
+        }
+    }
+
+    for(unsigned int sommet_id = 1; sommet_id<graph.size(); sommet_id++){
+        for(int sommet:graph[sommet_id]){
+                cout << "pass" << endl;
+                if((find(vue.begin(), vue.end(), -sommet) != vue.end()) && sommet_id != (unsigned) uip){
+                    if(varsStates[sommet_id]==0)
+                        clause.push_back(sommet_id);
+                    else
+                        clause.push_back(-sommet_id);
+                    break;
+                }
+        }
+    }
+    clause.push_back(uip);
+
+    //cout << "vue : [ ";
+    //for(int p:vue){cout << p << " ";} cout << "]" << endl;
+    //cout << "uip = " << uip << endl;
+    //cout << "graph = [";
+    //for(auto d:graph){cout << endl << " [";for(int p:d){cout << " " << p << " ";}cout << "]";}cout <<"]";
+    //cout << "add clause : [ ";
+    //for(int p:clause){cout << p << " ";} cout << "]" << endl;
+
+    clauses.push_back(clause);
+}
+
+void construct_graph_recur(vector<vector<int>>& clauses,
+						   vector<int>& deduction,
 						   vector<vector<int>>& graph,
-						   vector<int>& source_deduction, 
+						   vector<int>& source_deduction,
 						   int clause_id, int var_id){
 
 	if(clause_id == -1){return;}
 
 	for(int var:clauses[clause_id]){
-		if(graph[abs(var)].empty()){			
+		if(graph[abs(var)].empty()){
 				graph[abs(var)].push_back(var_id);
 
 				if(find(deduction.begin(), deduction.end(), -var) != deduction.end())

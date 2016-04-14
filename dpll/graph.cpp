@@ -3,13 +3,13 @@
 
 static bool VOIR = true;
 
-void check_conflict(vector<vector<int>>& graph, vector<int>& deduction, vector<int>& varsStates, vector<int>& paris){
+void check_conflict(vector<vector<int>>& graph, vector<int>& deduction, vector<int>& varsStates, vector<int>& paris, int uip){
 
-	
+
 
 	if(!VOIR){
 		return;
-	}		
+	}
 
 
 	string in;
@@ -18,7 +18,7 @@ void check_conflict(vector<vector<int>>& graph, vector<int>& deduction, vector<i
 		cin >> in;
 		if(in == "g"){
 			cout << deduction.empty() << endl;
-			generate_conflict_graph(graph, deduction, varsStates, paris);
+			generate_conflict_graph(graph, deduction, varsStates, paris, uip);
 			break;
 		}
 		else if(in == "c"){
@@ -34,30 +34,31 @@ void check_conflict(vector<vector<int>>& graph, vector<int>& deduction, vector<i
 }
 
 
-void generate_conflict_graph(vector<vector<int>>& graph, vector<int>& deduction, vector<int>& varsStates, vector<int>& paris){
-	ofstream fichier("conflit_graph.dot", ios::out | ios::trunc); 
+void generate_conflict_graph(vector<vector<int>>& graph, vector<int>& deduction, vector<int>& varsStates, vector<int>& paris, int uip){
+	ofstream fichier("conflit_graph.dot", ios::out | ios::trunc);
 	 if(fichier)
         {
-				cout << "paris " << paris.back();
+				cout << "paris " << paris.back() << endl;
                 fichier << "digraph G {" << endl;
 				fichier << "conflit  [style=filled,color=red];" << endl;
 
 				for(int var:deduction){
-					if(!graph[abs(var)].empty()){
+					if(!graph[abs(var)].empty() && abs(var) != uip){
 						fichier << var << " [style=filled,color=cyan];" << endl;
 					}
 				}
+				fichier << uip << " [style=filled,color=yellow];" << endl;
 
-				for(unsigned int sommet_id; sommet_id<graph.size(); sommet_id++){
+				for(unsigned int sommet_id = 0; sommet_id<graph.size(); sommet_id++){
 					vector<int> sommet = graph[sommet_id];
 					for(int cible:sommet){
 						if(cible==0)
 							fichier << sommet_id << "->conflit;" << endl;
 						else
 							fichier << sommet_id << "->" << cible << ";" << endl;
-					}								
+					}
 				}
-		
+
 
 				fichier << "}" << endl;
                 fichier.close();
