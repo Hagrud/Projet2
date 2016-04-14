@@ -61,23 +61,29 @@ bool conflit_graph(vector<vector<int>>& clauses,    vector<int>& paris,
                vector<bool>& clauses_valides,   vector<vector<int>>& deductions_clauses,
 			   vector<int>& source_deduction,   vector<bool>& varsStatesBool,
 			   int nV){
+
 	unsigned int conflit = get_clause_issue_id();
 
-        //Construction du graphe
+    /** Construction du graphe **/
 	vector<vector<int>> graph(nV+1, vector<int>());
 	construct_graph_recur(clauses, deductions.back(), graph, source_deduction, conflit, 0);
 
-    int uip = abs(paris.back());            //getUIP(graph);
+    /** Récupération de l'uip **/
+    int uip = abs(paris.back());     //getUIP(graph);
 
-
+    /** Affichage du graphe (si besoin) **/
 	check_conflict(graph, deductions.back(), paris, varsStates, uip);
+
+	/** Clause learning **/
     //deduct_clause(graph, clauses, varsStates, uip);
     //clauses_valides.push_back(false);
 
 	return true;
 }
 
+
 int getUIP(vector<vector<int>>& graph){
+    //TODO
     return 0;
 }
 
@@ -134,12 +140,17 @@ void construct_graph_recur(vector<vector<int>>& clauses,
 						   vector<int>& source_deduction,
 						   int clause_id, int var_id){
 
+    /** Si la variables précédentes est un paris on stop **/
 	if(clause_id == -1){return;}
 
+    /** Pour chaque variables dans la clause en cause on va l'ajouter au graphe si besoin. **/
 	for(int var:clauses[clause_id]){
+
+        /** Si l'on a jamais vu la variable **/
 		if(graph[abs(var)].empty()){
 				graph[abs(var)].push_back(var_id);
 
+                /** Si la variable fait partie des déductions on continue. **/
 				if(find(deduction.begin(), deduction.end(), -var) != deduction.end())
 					construct_graph_recur(clauses, deduction, graph, source_deduction, source_deduction[abs(var)-1], var);
 		}
