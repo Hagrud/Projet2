@@ -4,11 +4,14 @@ bool backtrack(vector<vector<int>>& clauses,    vector<int>& paris,
                vector<vector<int>>& deductions, vector<int>& varsStates,
                vector<bool>& clauses_valides,   vector<vector<int>>& deductions_clauses,
 			   vector<int>& source_deduction,   vector<bool>& varsStatesBool,
-			   int nV, bool wl){
-
+			   int nV, bool nwl){
 
         /** On vérifie si le paris que l'on a fait est plausible. **/
         if(!checkWithNull(clauses, varsStates)){
+			if(!nwl){
+				conflit_graph(clauses, paris, deductions, varsStates, clauses_valides, deductions_clauses,
+			   source_deduction, varsStatesBool, nV);
+			}
 
             /** On supprime les déductions associées **/
             for(int var:deductions.back()){
@@ -45,4 +48,48 @@ bool backtrack(vector<vector<int>>& clauses,    vector<int>& paris,
             if(check(clauses,varsStatesBool)){return true;}
         }
         return false;
+}
+
+bool conflit_graph(vector<vector<int>>& clauses,    vector<int>& paris,
+               vector<vector<int>>& deductions, vector<int>& varsStates,
+               vector<bool>& clauses_valides,   vector<vector<int>>& deductions_clauses,
+			   vector<int>& source_deduction,   vector<bool>& varsStatesBool,
+			   int nV){
+	unsigned int conflit = get_clause_issue_id();
+	//int var_conflict = 0;
+
+	//for(int var:clauses[conflit]){
+	//	cout << var << endl;
+	//	if(find(deductions.back().begin(), deductions.back().end(), -var) != deductions.back().end()){
+	//		var_conflict = var;
+	//		break;
+	//	}
+	//}
+
+	vector<vector<int>> graph(nV+1, vector<int>());
+	construct_graph_recur(clauses, deductions.back(), graph, source_deduction, conflit, 0);
+	check_conflict(graph, deductions.back(), paris, varsStates);
+	//cout << "var conflict :: " << var_conflict << endl;
+	return true;
+}
+
+void construct_graph_recur(vector<vector<int>>& clauses, 
+						   vector<int>& deduction, 
+						   vector<vector<int>>& graph,
+						   vector<int>& source_deduction, 
+						   int clause_id, int var_id){
+
+	if(clause_id == -1){return;}
+
+	for(int var:clauses[clause_id]){
+		if(graph[abs(var)].empty()){			
+				graph[abs(var)].push_back(var_id);
+
+				if(find(deduction.begin(), deduction.end(), -var) != deduction.end())
+					construct_graph_recur(clauses, deduction, graph, source_deduction, source_deduction[abs(var)-1], var);
+		}
+		else{
+				graph[abs(var)].push_back(var_id);
+		}
+	}
 }

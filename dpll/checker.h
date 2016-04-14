@@ -13,3 +13,5 @@ using namespace std;
 bool check(vector<vector<int>>& clauses, vector<bool>& varsStates);
 
 bool checkWithNull(vector<vector<int>>& clauses, vector<int>& varsStates);
+
+unsigned int get_clause_issue_id();

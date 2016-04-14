@@ -1,11 +1,13 @@
+#include <vector>
 #include <iostream>
 #include <stdlib.h>
-#include <vector>
+#include <string>
+#include <fstream>
 
 using namespace std;
 
 void init_graph_cpp(bool voir);
 
-void generate_conflict_graph();
+void generate_conflict_graph(vector<vector<int>>& graph, vector<int>& deduction, vector<int>& varsStates, vector<int>& paris);
 
-void check_conflict();
+void check_conflict(vector<vector<int>>& graph, vector<int>& deduction, vector<int>& varsStates, vector<int>& paris);

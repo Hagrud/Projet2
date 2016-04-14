@@ -1,5 +1,8 @@
 #include "checker.h"
 
+static unsigned int clause_issue = 0;
+//static int var_issue = 0;
+
 bool check(vector<vector<int>>& clauses, vector<bool>& varsStates){
 	//Pour chaque clauses on vérifie si elle est vérifié ou non.
 	for(auto vec:clauses){
@@ -25,7 +28,9 @@ bool check(vector<vector<int>>& clauses, vector<bool>& varsStates){
 }
 
 bool checkWithNull(vector<vector<int>>& clauses, vector<int>& varsStates){
-    for(auto vec:clauses){
+
+    for(unsigned int clause_id = 0; clause_id<clauses.size(); clause_id++){
+		vector<int> vec = clauses[clause_id];
 		bool state = false;
 		if(vec.empty()){return false;}
 		for(auto var: vec){
@@ -42,7 +47,14 @@ bool checkWithNull(vector<vector<int>>& clauses, vector<int>& varsStates){
 				}
 			}
 		}
-		if(!state){return false;}
+		if(!state){
+			clause_issue = clause_id;
+			return false;
+		}
 	}
 	return true;
+}
+
+unsigned int get_clause_issue_id(){
+	return clause_issue;
 }
