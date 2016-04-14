@@ -17,7 +17,6 @@ void check_conflict(vector<vector<int>>& graph, vector<int>& deduction, vector<i
 		cout << "conflit : (g c t)" << endl;
 		cin >> in;
 		if(in == "g"){
-			cout << deduction.empty() << endl;
 			generate_conflict_graph(graph, deduction, varsStates, paris, uip);
 			break;
 		}

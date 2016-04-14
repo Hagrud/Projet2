@@ -77,12 +77,12 @@ bool conflit_graph(vector<vector<int>>& clauses,    vector<int>& paris,
     /** Affichage du graphe (si besoin) **/
 	check_conflict(graph, deductions.back(), varsStates, paris,  uip);
 
-    //cout << "deduction = [";
-    //for(int p:deductions.back()){cout << p << " ";} cout << "]" << endl;
-    //cout << "clause conflit = [";
-    //for(int p:clauses[conflit]){cout << p << " ";} cout << "]" << endl;
-    //cout << "graph = [";
-    //for(auto d:graph){cout << endl << " [";for(int p:d){cout << " " << p << " ";}cout << "]";}cout <<"]";
+    cout << "deduction = [";
+    for(int p:deductions.back()){cout << p << " ";} cout << "]" << endl;
+    cout << "clause conflit = [";
+    for(int p:clauses[conflit]){cout << p << " ";} cout << "]" << endl;
+    cout << "graph = [";
+    for(auto d:graph){cout << endl << " [";for(int p:d){cout << " " << p << " ";}cout << "]";}cout <<"]";
 
 	/** Clause learning **/
 	if(deductions.back().size() != 0){   //On ajoute pas de clause si on a eu aucunes déductions avant le conflit.
@@ -152,12 +152,15 @@ void construct_graph_recur(vector<vector<int>>& clauses,
 						   vector<int>& source_deduction,
 						   int clause_id, int var_id){
 
+    cout << "var id : " << var_id << endl;
     /** Si la variables précédentes est un paris on stop **/
 	if(clause_id == -1){return;}
 
     /** Pour chaque variables dans la clause en cause on va l'ajouter au graphe si besoin. **/
+    cout << "clause : [ ";
+    for(int p:clauses[clause_id]){cout << p << " ";} cout << "]" << endl;
 	for(int var:clauses[clause_id]){
-
+        cout << var_id << "var in clause : " << var << endl;
         /** Si l'on a jamais vu la variable **/
 		if(graph[abs(var)].empty()){
 				graph[abs(var)].push_back(var_id);
