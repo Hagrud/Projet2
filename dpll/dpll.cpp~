@@ -101,6 +101,7 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV, bool polarite_active){
 
             /** Si on avait un paris il faut l'enlever **/
             if(!paris.empty()){
+				cout << "on deduit dpll :::: " << paris.back() << endl;
             	deductions.pop_back();
             	deductions.back().push_back(-paris.back());
             	if(varsStates[paris.back()-1] == 0){

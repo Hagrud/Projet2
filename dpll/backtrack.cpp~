@@ -156,7 +156,7 @@ void construct_graph_recur(vector<vector<int>>& clauses,
 						   vector<int>& source_deduction,
 						   int clause_id, int var_id){
 
-    //cout << "var id : " << var_id << endl;
+    cout << "var id : " << var_id << endl;
     /** Si la variables précédentes est un paris on stop **/
 	if(clause_id == -1){
 		if(find(deduction.begin(), deduction.end(), -var_id) != deduction.end()){

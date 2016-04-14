@@ -56,11 +56,18 @@ void generate_conflict_graph(vector<vector<int>>& graph, vector<int>& deduction,
 					if(varsStates[sommet_id-1]==0)
                         sommet_value = -sommet_id;
 
+					
+
 					for(int cible:sommet){
+
 						if(cible==0)
 							fichier << sommet_value << "->conflit;" << endl;
-						else
+						else{
+							if(varsStates[cible-1]==0)
+                       			cible = -cible;
 							fichier << sommet_value << "->" << cible << ";" << endl;
+						}
+							
 					}
 				}
 
