@@ -10,14 +10,14 @@ pair<vector<vector<int>>,int> parse(const char* path)
 
     if(!file)
     {
-	cout << "File " << path << " not found." << endl;
-	return make_pair(vars, 0);
+        cout << "File " << path << " not found." << endl;
+        return make_pair(vars, 0);
     }
 
     string line;
 
     do {
-	getline(file, line);
+        getline(file, line);
     } while(line[0] == 'c');
 
     istringstream iss(line);
@@ -27,22 +27,22 @@ pair<vector<vector<int>>,int> parse(const char* path)
 
     while(getline(file, line))
     {
-	if(line.empty())
-	    continue;
+        if(line.empty())
+            continue;
 
-	vars.push_back({});
-	if(line[0] == 'c')
-	{
-	    continue;
-	}
+        vars.push_back({});
+        if(line[0] == 'c')
+        {
+            continue;
+        }
 
-	istringstream iss(line);
+        istringstream iss(line);
 
-	while(iss >> val && val != 0)
-	{
-	    vars.back().push_back(val);
-	    Vmax = max(Vmax, abs(val) );
-	}
+        while(iss >> val && val != 0)
+        {
+            vars.back().push_back(val);
+            Vmax = max(Vmax, abs(val) );
+        }
     }
 
 	if(vars.back().empty())

@@ -1,5 +1,12 @@
 #include "main.h"
 
+bool global::DLIS = false;
+bool global::INTERACT = false;
+bool global::MOMS = false;
+bool global::RAND = false;
+bool global::TSEITIN = false;
+bool global::WL = false;
+
 typedef struct Option Option;
 struct Option {
     string name;
@@ -108,24 +115,24 @@ char* create_tseitin(char* file)
     freopen(file, "r", stdin);
 
     yyparse();
-    
+
     strcat(file, ".cnf");
-    
+
     ofstream myfile;
     myfile.open(file);
 
     int var_count = 0, cur_var_count = 0, clause_count = 0;
-    
+
     vector<Expr*> exprs;
-    
+
     set<int> vars;
-    
+
     res->get_vars(vars);
 
     int max_var = 0;
     for(auto it : vars)
 	max_var = max(it, max_var);
-    
+
     Expr * var = res->tseitin(max_var, exprs);
     exprs.push_back(var);
 
@@ -137,7 +144,7 @@ char* create_tseitin(char* file)
 	result += exprs[i]->to_cnf(cur_var_count, clause_count);
 	var_count = max(cur_var_count, var_count);
 	cur_var_count = 0;
-	
+
 	result += "\n";
     }
 
@@ -151,7 +158,7 @@ char* create_tseitin(char* file)
 	}
 
     }
-    
+
     myfile << "p cnf " << var_count << " " << clause_count << endl;
     myfile << result;
 
@@ -176,6 +183,13 @@ bool get_option(string option){
 }
 
 void init(){
+    global::DLIS = get_option("dlis");
+    global::INTERACT = get_option("-cl-interac");
+    global::MOMS = get_option("moms");
+    global::RAND = get_option("rand");
+    global::TSEITIN = get_option("tseitin");
+    global::WL = get_option("wl");
+
 	set_option(get_option("rand"), get_option("moms"));
 	init_graph_cpp(get_option("cl-interac"));
 }

@@ -13,7 +13,7 @@
 
 extern "C" FILE *yyin;
 extern Expr *res;
-    
+
 
 #include "dpll/paris.h"
 #include "dpll/graph.h"
@@ -32,6 +32,21 @@ char* lire_args(int argc, char* argv[]);
 void reponse(vector<vector<int>>& clauses,vector<bool>& rep);
 
 char* create_tseitin(char* file);
+
 bool get_option(string option);
 
 void init();
+
+/**
+*@desc Contient les variables globales.
+*/
+class global
+{
+    public:
+    static bool DLIS;
+    static bool MOMS;
+    static bool RAND;
+    static bool TSEITIN;
+    static bool INTERACT;
+    static bool WL;
+};
