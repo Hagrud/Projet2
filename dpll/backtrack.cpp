@@ -170,12 +170,7 @@ void construct_graph_recur(vector<vector<int>>& clauses,
     //for(int p:clauses[clause_id]){cout << p << " ";} cout << "]" << endl;
 
 	for(int var:clauses[clause_id]){
-<<<<<<< HEAD
-
 		if(abs(var)==abs(var_id)){continue;}
-
-=======
->>>>>>> origin/master
         //cout << var_id << "var in clause : " << var << endl;
         /** Si l'on a jamais vu la variable **/
 		if(graph[abs(var)].empty()){
