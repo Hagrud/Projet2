@@ -1,0 +1,7 @@
+digraph G {
+conflit  [style=filled,color=red];
+5 [style=filled,color=yellow];
+1->conflit;
+-2->conflit;
+-3->conflit;
+}
