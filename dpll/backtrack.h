@@ -44,6 +44,7 @@ void deduct_clause(vector<vector<int>>& graph, vector<vector<int>>& clauses, vec
 */
 void construct_graph_recur(vector<vector<int>>& clauses,
 						   vector<int>& deduction,
+						   vector<int>& paris,
 						   vector<vector<int>>& graph,
 						   vector<int>& source_deduction,
 						   int clause_id, int var_id);

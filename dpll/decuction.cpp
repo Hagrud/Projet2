@@ -11,14 +11,14 @@ bool unitProp(vector<vector<int>>& clauses,
     vector<int> vue(varsStates.size(), 0);
     vector<int> vue_en_cour(varsStates.size(), 0);
 
-
+	//cout << "unit prop" << endl;
     /** On va vérifier chaque clause une par une. **/
     vector<int> clause;
 	for(unsigned int clause_id = 0;clause_id < clauses.size(); clause_id++){
 
         /** Si la clause est déja validé on ne la traite pas **/
-        if(!clauses_valides[clause_id])
-            continue;
+        //if(clauses_valides[clause_id])
+        //    continue;
 
         clause = clauses[clause_id];
 
@@ -45,6 +45,7 @@ bool unitProp(vector<vector<int>>& clauses,
 
 				/** On fixe la variable si on a une clause unitaire **/
 				if(compteur==1){
+					//cout << "deduit un truc" << endl;
 					if(var<0)
 						varsStates[-var-1]=0;
 					else

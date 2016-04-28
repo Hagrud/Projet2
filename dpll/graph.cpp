@@ -49,18 +49,26 @@ void generate_conflict_graph(vector<vector<int>>& graph, vector<int>& deduction,
 				}
 				fichier << uip << " [style=filled,color=yellow];" << endl;
 
-				for(unsigned int sommet_id = 0; sommet_id<graph.size(); sommet_id++){
+				for(int sommet_id = 1; sommet_id<(int) graph.size(); sommet_id++){
 					vector<int> sommet = graph[sommet_id];
 
 					int sommet_value = sommet_id;
 					if(varsStates[sommet_id-1]==0)
                         sommet_value = -sommet_id;
 
+					
+
 					for(int cible:sommet){
+
 						if(cible==0)
 							fichier << sommet_value << "->conflit;" << endl;
-						else
+						else{
+							cible = abs(cible);
+							if(varsStates[cible-1]==0)
+                       			cible = -abs(cible);
 							fichier << sommet_value << "->" << cible << ";" << endl;
+						}
+							
 					}
 				}
 

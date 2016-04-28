@@ -17,7 +17,7 @@ bool backtrack(vector<vector<int>>& clauses,    vector<int>& paris,
             /** On supprime les déductions associées **/
             for(int var:deductions.back()){
                 varsStates[abs(var)-1] = -1;
-                source_deduction[abs(var)-1]=0;
+                source_deduction[abs(var)-1]=-1;
 				change_libre(1);
             }
             for(int clause_id:deductions_clauses.back()){
@@ -67,9 +67,12 @@ bool conflit_graph(vector<vector<int>>& clauses,    vector<int>& paris,
 
 	unsigned int conflit = get_clause_issue_id();
 
+    //cout << "source_deduction = [";
+    //for(int p:source_deduction){cout << p << " ";} cout << "]" << endl;
+
     /** Construction du graphe **/
 	vector<vector<int>> graph(nV+1, vector<int>());
-	construct_graph_recur(clauses, deductions.back(), graph, source_deduction, conflit, 0);
+	construct_graph_recur(clauses, deductions.back(), paris,  graph, source_deduction, conflit, 0);
 
     /** Récupération de l'uip **/
     int uip = abs(paris.back());     //getUIP(graph);
@@ -77,12 +80,12 @@ bool conflit_graph(vector<vector<int>>& clauses,    vector<int>& paris,
     /** Affichage du graphe (si besoin) **/
 	check_conflict(graph, deductions.back(), varsStates, paris,  uip);
 
-    cout << "deduction = [";
-    for(int p:deductions.back()){cout << p << " ";} cout << "]" << endl;
-    cout << "clause conflit = [";
-    for(int p:clauses[conflit]){cout << p << " ";} cout << "]" << endl;
-    cout << "graph = [";
-    for(auto d:graph){cout << endl << " [";for(int p:d){cout << " " << p << " ";}cout << "]";}cout <<"]";
+    //cout << "deduction = [";
+    //for(int p:deductions.back()){cout << p << " ";} cout << "]" << endl;
+    //cout << "clause conflit = [";
+    //for(int p:clauses[conflit]){cout << p << " ";} cout << "]" << endl;
+    //cout << "graph = [";
+    //for(auto d:graph){cout << endl << " [";for(int p:d){cout << " " << p << " ";}cout << "]";}cout <<"]";
 
 	/** Clause learning **/
 	if(deductions.back().size() != 0){   //On ajoute pas de clause si on a eu aucunes déductions avant le conflit.
@@ -140,34 +143,44 @@ void deduct_clause(vector<vector<int>>& graph, vector<vector<int>>& clauses, vec
     //cout << "uip = " << uip << endl;
     //cout << "graph = [";
     //for(auto d:graph){cout << endl << " [";for(int p:d){cout << " " << p << " ";}cout << "]";}cout <<"]";
-    cout << "add clause : [ ";
-    for(int p:clause){cout << p << " ";} cout << "]" << endl;
+    //cout << "add clause : [ ";
+    //for(int p:clause){cout << p << " ";} cout << "]" << endl;
 
     clauses.push_back(clause);
 }
 
 void construct_graph_recur(vector<vector<int>>& clauses,
 						   vector<int>& deduction,
+						   vector<int>& paris,
 						   vector<vector<int>>& graph,
 						   vector<int>& source_deduction,
 						   int clause_id, int var_id){
 
-    cout << "var id : " << var_id << endl;
+    //cout << "var id : " << var_id << endl;
     /** Si la variables précédentes est un paris on stop **/
-	if(clause_id == -1){return;}
+	if(clause_id == -1){
+		if(find(deduction.begin(), deduction.end(), -var_id) != deduction.end()){
+			graph[abs(paris.back())].push_back(var_id);
+		}
+		return;
+	}
 
     /** Pour chaque variables dans la clause en cause on va l'ajouter au graphe si besoin. **/
-    cout << "clause : [ ";
-    for(int p:clauses[clause_id]){cout << p << " ";} cout << "]" << endl;
+    //cout << "clause : [ ";
+    //for(int p:clauses[clause_id]){cout << p << " ";} cout << "]" << endl;
+
 	for(int var:clauses[clause_id]){
-        cout << var_id << "var in clause : " << var << endl;
+
+		if(abs(var)==abs(var_id)){continue;}
+
+        //cout << var_id << "var in clause : " << var << endl;
         /** Si l'on a jamais vu la variable **/
 		if(graph[abs(var)].empty()){
 				graph[abs(var)].push_back(var_id);
 
                 /** Si la variable fait partie des déductions on continue. **/
 				if(find(deduction.begin(), deduction.end(), -var) != deduction.end())
-					construct_graph_recur(clauses, deduction, graph, source_deduction, source_deduction[abs(var)-1], var);
+					construct_graph_recur(clauses, deduction, paris, graph, source_deduction, source_deduction[abs(var)-1], var);
 		}
 		else{
 				graph[abs(var)].push_back(var_id);

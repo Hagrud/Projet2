@@ -1,5 +1,42 @@
 /**
 *
+*Rendu 3
+*
+**/
+Le code se compose en 3 parties :
+	Main:			Gestion de l'affichage (réponse pour l'utilisateur), récupération des options.
+	Parser/Tseitin: Lecture du fichier d'entrée et conversion de la formule logique en instance de SAT.
+		Correction des bugs
+		Implémentation de l'option -tseitin
+	DPLL: 			Résolution du problème SAT pour savoir si il admet une solution.
+
+
+Structures de données :
+	Même que pour le rendu 2.
+	-Graphe : vector<vector<int>>			:	Liste d'adjacence.
+
+Répartition du travail:
+	Parser/Tseitin: Mangold Paul, Polet Pierre-Etienne.
+	DPLL: Polet Pierre-Etienne, Mangold Paul.
+	Main: Polet Pierre-Etienne, Mangold Paul.
+
+Performances:
+	La partie clause learning n'a pas été traitée, donc l'utilisation du -wl ne fait que ralentir le programme car on calcul le graphe des conflits pour rien.
+
+Commentaire:
+	On a perdu énormément de temps à débuger Tseitin et l'affichage du graphe.
+	Visiblement on a un problème avec les déductions mais on cherche encore l'origine.
+	
+
+
+
+
+
+
+	
+
+/**
+*
 *Rendu 2
 *
 **/

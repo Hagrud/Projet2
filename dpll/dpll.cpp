@@ -103,7 +103,12 @@ vector<bool> dpll(vector<vector<int>>& clauses, int nV, bool polarite_active){
             if(!paris.empty()){
             	deductions.pop_back();
             	deductions.back().push_back(-paris.back());
-            	varsStates[paris.back()-1] = 0;//WARNING POUR PLUS TARD
+            	if(varsStates[paris.back()-1] == 0){
+					varsStates[paris.back()-1] = 1;
+				}
+				else{
+                	varsStates[paris.back()-1] = 0; //WARNING POUR PLUS TARD
+				}
             	paris.pop_back();
             }
             /** Sinon le problème n'est pas satisfiable. **/
