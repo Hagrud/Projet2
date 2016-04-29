@@ -7,7 +7,7 @@ YACC=bison
 NAME=expr
 
 
-all: objets/*.cpp dpll/*.cpp main.cpp *.cpp tseitin/$(NAME).tab.cpp tseitin/$(NAME).yy.c tseitin/$(NAME).cpp
+all: objets/*.cpp dpll/*.cpp dpll/*/*.cpp main.cpp *.cpp tseitin/$(NAME).tab.cpp tseitin/$(NAME).yy.c tseitin/$(NAME).cpp
 	$(CC) -std=gnu++11 -g -Wall -Wno-write-strings -o resol $^ $(LIBLEX)
 
 color:

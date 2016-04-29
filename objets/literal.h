@@ -13,4 +13,5 @@ class Literal{
         int id;
         vector<int> deduction;
         bool pari;
+        bool fixed;
 };
