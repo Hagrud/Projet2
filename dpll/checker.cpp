@@ -55,14 +55,22 @@ bool checkWithNull(vector<vector<int>>& clauses, vector<int>& varsStates){
 	return true;
 }
 
-bool check(vector<vector<int>>& clauses, vector<Literal>& literals){
-    for(vector<int> clause:clauses){
+bool check(vector<Clause*>& clauses, vector<Literal>& literals){
+    for(Clause* c:clauses){
 
+        if(c->isValid())
+            continue;
+
+        vector<int> clause = c->getVariables();
         if(clause.empty()){return false;}
 
         bool state = false;
         for(int var:clause){
             if( (var>0) == (literals[abs(var)].getValue()) ){
+
+                Literal &lit = literals[abs(var)];
+                lit.addValidate_Clause(c);
+
                 state = true;
                 break;
             }
@@ -74,14 +82,24 @@ bool check(vector<vector<int>>& clauses, vector<Literal>& literals){
     return true;
 }
 
-bool checkWithNull(vector<vector<int>>& clauses, vector<Literal>& literals){
-    for(vector<int> clause:clauses){
+bool checkWithNull(vector<Clause*>& clauses, vector<Literal>& literals){
+    for(Clause* c : clauses){
 
+        if(c->isValid())
+            continue;
+
+        vector<int> clause = c->getVariables();
         if(clause.empty()){return false;}
 
         bool state = false;
         for(int var:clause){
             if(((var>0) == (literals[abs(var)].getValue())) || !literals[abs(var)].isFixed()){
+
+                if(literals[abs(var)].isFixed()){
+                    Literal &lit = literals[abs(var)];
+                    lit.addValidate_Clause(c);
+                }
+
                 state = true;
                 break;
             }

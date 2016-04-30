@@ -4,12 +4,14 @@
 Literal::Literal(){
     id = 0;
     deductions.resize(0);
+    validate_clauses.resize(0);
     pari=true;
     fixed=true;
 }
 Literal::Literal(int n){
     id = n;
     deductions.resize(0);
+    validate_clauses.resize(0);
     pari = n==0;
     fixed = n==0;
 }
@@ -36,10 +38,12 @@ void Literal::setPari(bool b){
 
 void Literal::setFixed(bool b){
     fixed = b;
+    clearValidate_Clauses();
 }
 
 void Literal::setValue(bool b){
     value = b;
+    clearValidate_Clauses();
 }
 
 vector<int> Literal::getDeductions(){
@@ -54,4 +58,15 @@ void Literal::clearDeduct(){
     deductions.resize(0);
 }
 
+void Literal::addValidate_Clause(Clause* clause){
+    validate_clauses.push_back(clause);
+    clause->setValid(true);
+}
+
+void Literal::clearValidate_Clauses(){
+    for(Clause* clause : validate_clauses){
+        clause->setValid(false);
+    }
+    validate_clauses.resize(0);
+}
 

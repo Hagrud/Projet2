@@ -7,8 +7,6 @@ bool backtrack(vector<Literal>& literals, vector<int>& paris){
         return false;
     }
 
-
-
     Literal &lit = literals[paris.back()];
     paris.pop_back();
 

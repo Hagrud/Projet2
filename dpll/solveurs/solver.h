@@ -7,6 +7,7 @@
 #include "../dpll.h"
 
 #include "../../objets/literal.h"
+#include "../../objets/clause.h"
 
 class solveur
 {

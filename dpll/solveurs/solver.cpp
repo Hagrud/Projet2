@@ -4,7 +4,6 @@ vector<bool> solveur::to_vector(vector<Literal>& literals){
     vector<bool> varsStates;
     varsStates.resize(0);
 
-    cout << "to vector" << endl;
     for(Literal lit : literals){
         if(lit.getId() == 0)
             continue;

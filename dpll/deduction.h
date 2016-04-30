@@ -27,3 +27,7 @@ bool polarite_unique(vector<vector<int>>& clauses,
                      vector<int>& paris,
                      vector<vector<int>>& deductions,
                      vector<int>& varsStates);
+
+
+bool dedUnitaire(vector<Clause *>& clauses, vector<Literal>& literals, Literal &paris);
+bool polarite_unique(vector<Clause *>& clauses, vector<Literal>& literals, Literal &paris);
