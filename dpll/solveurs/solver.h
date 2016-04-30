@@ -10,11 +10,16 @@
 
 class solveur
 {
-    virtual vector<bool> solve(vector<vector<int>>& clauses, int nV);
+    public:
+    virtual vector<bool> solve(vector<vector<int>>& clauses, int nV)=0;
+
+    protected:
+    vector<bool> to_vector(vector<Literal>& literals);
 };
 
 class solveur_naif : public solveur
 {
+    public:
     vector<bool> solve(vector<vector<int>>& clauses, int nV);
 };
 

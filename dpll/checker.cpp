@@ -55,6 +55,45 @@ bool checkWithNull(vector<vector<int>>& clauses, vector<int>& varsStates){
 	return true;
 }
 
+bool check(vector<vector<int>>& clauses, vector<Literal>& literals){
+    for(vector<int> clause:clauses){
+
+        if(clause.empty()){return false;}
+
+        bool state = false;
+        for(int var:clause){
+            if( (var>0) == (literals[abs(var)].getValue()) ){
+                state = true;
+                break;
+            }
+        }
+        if(!state){
+            return false;
+        }
+    }
+    return true;
+}
+
+bool checkWithNull(vector<vector<int>>& clauses, vector<Literal>& literals){
+    for(vector<int> clause:clauses){
+
+        if(clause.empty()){return false;}
+
+        bool state = false;
+        for(int var:clause){
+            if(((var>0) == (literals[abs(var)].getValue())) || !literals[abs(var)].isFixed()){
+                state = true;
+                break;
+            }
+        }
+        if(!state){
+            return false;
+        }
+    }
+    return true;
+}
+
+
 unsigned int get_clause_issue_id(){
 	return clause_issue;
 }

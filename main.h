@@ -18,6 +18,9 @@ extern Expr *res;
 #include "dpll/paris.h"
 #include "dpll/graph.h"
 
+#include "dpll/parieurs/parieur.h"
+#include "dpll/solveurs/solveur_deduction.h"
+
 using namespace std;
 
 /**

@@ -1,5 +1,33 @@
 #include "backtrack.h"
 
+
+bool backtrack(vector<Literal>& literals, vector<int>& paris){
+    cout << "backtack" << endl;
+    if(paris.size()<=1){
+        return false;
+    }
+
+
+
+    Literal &lit = literals[paris.back()];
+    paris.pop_back();
+
+    for(int deduction : lit.getDeductions()){
+        Literal &ded = literals[deduction];
+        ded.setFixed(false);
+    }
+
+    lit.clearDeduct();
+    lit.setValue(!lit.getValue());
+    lit.setPari(false);
+
+    Literal &precedent = literals[paris.back()];
+    precedent.addDeduct(lit.getId());
+    cout << "paris : [ "; for(auto p:paris){cout << p << " ";} cout << "]" << endl;
+    cout << "deduction : [ "; for(auto p:literals[paris.back()].getDeductions()){cout << p << " ";}cout << "]" << endl;
+    return true;
+}
+
 bool backtrack(vector<vector<int>>& clauses,    vector<int>& paris,
                vector<vector<int>>& deductions, vector<int>& varsStates,
                vector<bool>& clauses_valides,   vector<vector<int>>& deductions_clauses,
