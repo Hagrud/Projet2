@@ -106,7 +106,6 @@ bool checkWithNull(vector<Clause*>& clauses, vector<Literal>& literals){
             }
         }
         if(!state){
-			clause_issue = id;
             return false;
         }
     }

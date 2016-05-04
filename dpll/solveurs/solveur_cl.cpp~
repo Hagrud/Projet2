@@ -1,0 +1,13 @@
+#include "solveur_cl.h"
+
+
+void Solveur_cl::deduction(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris){
+	Literal &last_paris = literals[paris.back()];
+    while(dedUnitaire(clauses, literals, last_paris)){}
+}
+
+
+bool Solveur_cl::backtrack(vector<Literal>& literals, vector<int>& paris){
+	//Conflit graph
+	return Solveur_deduction::backtrack(literals, paris);
+}

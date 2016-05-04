@@ -1,6 +1,6 @@
 #include "solveur_deduction.h"
 
-Solveur_deduction::Solveur_deduction(){}
+
 Solveur_deduction::Solveur_deduction(Parieur p){
     parieur = p;
 }
@@ -28,7 +28,7 @@ vector<bool> Solveur_deduction::solve(vector<vector<int>>& clauses_, int nV){
 		deduction(clauses, literals, paris);
 
         if(!checkWithNull(clauses, literals)){  //On verifie si on est pas dans une impasse.
-            if(!backtrack(clauses, literals, paris)){
+            if(!backtrack(literals, paris)){
                 return to_vector(literals);
             }
         }
@@ -40,7 +40,7 @@ vector<bool> Solveur_deduction::solve(vector<vector<int>>& clauses_, int nV){
 
         if(!parieur.parier(literals, paris)){   //On fait un paris.
 
-            if(!backtrack(clauses, literals, paris)){
+            if(!backtrack(literals, paris)){
                 return to_vector(literals);
             }
 
@@ -49,7 +49,7 @@ vector<bool> Solveur_deduction::solve(vector<vector<int>>& clauses_, int nV){
     }
 }
 
-bool Solveur_deduction::backtrack(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris){
+bool backtrack(vector<Literal>& literals, vector<int>& paris){
     //cout << "backtack" << endl;
     if(paris.size()<=1){
         return false;

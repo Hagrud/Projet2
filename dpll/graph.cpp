@@ -85,3 +85,15 @@ void generate_conflict_graph(vector<vector<int>>& graph, vector<int>& deduction,
 void init_graph_cpp(bool voir){
 	VOIR = voir;
 }
+
+
+
+
+
+
+
+
+
+
+
+

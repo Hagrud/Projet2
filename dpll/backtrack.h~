@@ -14,7 +14,7 @@
 *
 *
 */
-//bool backtrack(vector<Literal>& literals, vector<int>& paris);
+bool backtrack(vector<Literal>& literals, vector<int>& paris);
 
 /**
 *@desc fait le backtracking si necessaire.

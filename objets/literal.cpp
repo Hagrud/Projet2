@@ -70,3 +70,8 @@ void Literal::clearValidate_Clauses(){
     validate_clauses.resize(0);
 }
 
+Clause* Literal::get_first_validate_clause(){
+  if(validate_clauses.empty())
+    return nullptr;
+  return validate_clauses[0];
+}

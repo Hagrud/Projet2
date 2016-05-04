@@ -1,6 +1,6 @@
 #include "backtrack.h"
 
-/*
+
 bool backtrack(vector<Literal>& literals, vector<int>& paris){
     //cout << "backtack" << endl;
     if(paris.size()<=1){
@@ -24,7 +24,7 @@ bool backtrack(vector<Literal>& literals, vector<int>& paris){
     //cout << "paris : [ "; for(auto p:paris){cout << p << " ";} cout << "]" << endl;
     //cout << "deduction : [ "; for(auto p:literals[paris.back()].getDeductions()){cout << p << " ";}cout << "]" << endl;
     return true;
-}*/
+}
 
 bool backtrack(vector<vector<int>>& clauses,    vector<int>& paris,
                vector<vector<int>>& deductions, vector<int>& varsStates,
@@ -32,7 +32,7 @@ bool backtrack(vector<vector<int>>& clauses,    vector<int>& paris,
 			   vector<int>& source_deduction,   vector<bool>& varsStatesBool,
 			   int nV, bool nwl){
 
-        /** On v?rifie si le paris que l'on a fait est plausible. **/
+        /** On vérifie si le paris que l'on a fait est plausible. **/
         if(!checkWithNull(clauses, varsStates)){
 
 			if(!nwl){
@@ -40,7 +40,7 @@ bool backtrack(vector<vector<int>>& clauses,    vector<int>& paris,
 			   source_deduction, varsStatesBool, nV);
 			}
 
-            /** On supprime les d?ductions associ?es **/
+            /** On supprime les déductions associées **/
             for(int var:deductions.back()){
                 varsStates[abs(var)-1] = -1;
                 source_deduction[abs(var)-1]=-1;
@@ -63,13 +63,13 @@ bool backtrack(vector<vector<int>>& clauses,    vector<int>& paris,
 
             	paris.pop_back();
             }
-            /** Sinon le probl?me n'est pas satisfiable. **/
+            /** Sinon le problème n'est pas satisfiable. **/
             else{
                 for(int i = 0;i<nV;i++){varsStatesBool[i]=(varsStates[i]==1);}
                 return true;
             }
         }
-        /** Sinon on v?rifie si l'instance en cours v?rifie le probl?me SAT (si oui on retourne) **/
+        /** Sinon on vérifie si l'instance en cours vérifie le problème SAT (si oui on retourne) **/
         else{
             for(int i = 0;i<nV;i++){varsStatesBool[i]=(varsStates[i]==1);}
             if(check(clauses,varsStatesBool)){return true;}
@@ -100,7 +100,7 @@ bool conflit_graph(vector<vector<int>>& clauses,    vector<int>& paris,
 	vector<vector<int>> graph(nV+1, vector<int>());
 	construct_graph_recur(clauses, deductions.back(), paris,  graph, source_deduction, conflit, 0);
 
-    /** R?cup?ration de l'uip **/
+    /** Récupération de l'uip **/
     int uip = abs(paris.back());     //getUIP(graph);
 
     /** Affichage du graphe (si besoin) **/
@@ -114,7 +114,7 @@ bool conflit_graph(vector<vector<int>>& clauses,    vector<int>& paris,
     //for(auto d:graph){cout << endl << " [";for(int p:d){cout << " " << p << " ";}cout << "]";}cout <<"]";
 
 	/** Clause learning **/
-	if(deductions.back().size() != 0){   //On ajoute pas de clause si on a eu aucunes d?ductions avant le conflit.
+	if(deductions.back().size() != 0){   //On ajoute pas de clause si on a eu aucunes déductions avant le conflit.
     //        deduct_clause(graph, clauses, varsStates, uip);
     //        clauses_valides.push_back(false);
 	}
@@ -183,7 +183,7 @@ void construct_graph_recur(vector<vector<int>>& clauses,
 						   int clause_id, int var_id){
 
     //cout << "var id : " << var_id << endl;
-    /** Si la variables pr?c?dentes est un paris on stop **/
+    /** Si la variables précédentes est un paris on stop **/
 	if(clause_id == -1){
 		if(find(deduction.begin(), deduction.end(), -var_id) != deduction.end()){
 			graph[abs(paris.back())].push_back(var_id);
@@ -202,7 +202,7 @@ void construct_graph_recur(vector<vector<int>>& clauses,
 		if(graph[abs(var)].empty()){
 				graph[abs(var)].push_back(var_id);
 
-                /** Si la variable fait partie des deductions on continue. **/
+                /** Si la variable fait partie des déductions on continue. **/
 				if(find(deduction.begin(), deduction.end(), -var) != deduction.end())
 					construct_graph_recur(clauses, deduction, paris, graph, source_deduction, source_deduction[abs(var)-1], var);
 		}

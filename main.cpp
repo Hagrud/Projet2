@@ -36,24 +36,26 @@ int main(int argc, char* argv[]){
     pair<vector<vector<int>>,int> parsed = parse(file);
     vector<vector<int>> clauses = parsed.first;
 
-	//cout << "clauses :: [" << endl;
-    //for(auto c:clauses){cout << "[ ";for(auto p:c){cout << p << " ";}cout << "]" << endl;}
-	//cout << "]" << endl;
-
-
-
     if(parsed.second==0){   //Si on n'a pas de variable il y a une erreur.
 		cout << "s SATISFIABLE" << endl;
         return 0;
     }
 
+    
     Parieur parieur = Parieur();
-    solveur *solveur = new Solveur_deduction(parieur);
+    solveur *solveur;
+    if(get_option("cl-interac")){
+      solveur = new Solveur_cl(parieur);
+      cout << "solveur_cl" << endl;
+    }
+    else{
+      solveur = new Solveur_deduction(parieur);
+    }
 
     vector<bool> rep = solveur->solve(clauses, parsed.second);
 
 
-	//init();
+	  //init();
     //vector<bool> rep = dpll(clauses, parsed.second, !(get_option("cl-interac") || get_option("wl")));
     //vector<bool> rep = dpll_naif(clauses, parsed.second);
     reponse(clauses, rep);
@@ -86,7 +88,7 @@ void reponse(vector<vector<int>>& clauses,vector<bool>& rep){
 
 char* lire_args(int argc, char* argv[]){
     char* file;                //nom du fichier a lire
-    bool arg_valide = false;        //validité de l'argument lu
+    bool arg_valide = false;        //validit? de l'argument lu
 
     for(int i = 1; i<argc; i++){//On lit tous les arguments sauf le nom du programme.
         arg_valide = false;
@@ -97,7 +99,7 @@ char* lire_args(int argc, char* argv[]){
         }
         else{
             Option *opt;
-            for(opt = options; opt->name != ""; opt++){//On vérifie si l'argument est une option connu.
+            for(opt = options; opt->name != ""; opt++){//On v?rifie si l'argument est une option connu.
                 if(opt->id == argv[i]){
                     opt->active = true;
                     arg_valide = true;
@@ -219,7 +221,7 @@ void yyerror(const char *s) {
 bool get_option(string option){
 	option = "-" + option;
 	Option *opt;
-    for(opt = options; opt->name != ""; opt++){//On vérifie si l'argument est une option connu.
+    for(opt = options; opt->name != ""; opt++){//On v?rifie si l'argument est une option connu.
     	if(opt->id == option){
         	return opt->active;
 		}

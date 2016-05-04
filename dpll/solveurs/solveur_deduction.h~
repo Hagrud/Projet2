@@ -11,18 +11,14 @@
 class Solveur_deduction : public solveur
 {
     public:
-        Solveur_deduction();
         Solveur_deduction(Parieur p);
         vector<bool> solve(vector<vector<int>>& clauses, int nV);
-
-
-	protected:
-    void pre_solve(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris);
+        void pre_solve(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris);
 		void deduction(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris);
-		virtual bool backtrack(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris);
+		bool backtrack(vector<Literal>& literals, vector<int>& paris);
 
-  private:
-    Parieur parieur;
+    private:
+        Parieur parieur;
 };
 
 #endif // DEF_SOLVEUR_DEDUCTION

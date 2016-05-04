@@ -31,6 +31,7 @@ class Literal{
 
         void clearValidate_Clauses();
         void addValidate_Clause(Clause* clause);
+        Clause* get_first_validate_clause();
 
     private:
         bool value;

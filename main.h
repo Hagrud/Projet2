@@ -22,17 +22,18 @@ extern Expr *res;
 
 #include "dpll/parieurs/parieur.h"
 #include "dpll/solveurs/solveur_deduction.h"
+#include "dpll/solveurs/solveur_cl.h"
 
 using namespace std;
 
 /**
-*@desc Lit les arguments donnés au programme, détecte les options, prévient si une option inconnue est utilisée
-*@return Le nom du fichier entrée en argument.
+*@desc Lit les arguments donn?s au programme, d?tecte les options, pr?vient si une option inconnue est utilis?e
+*@return Le nom du fichier entr?e en argument.
 */
 char* lire_args(int argc, char* argv[]);
 
 /**
-*@desc Met en forme la réponse du programme.
+*@desc Met en forme la r?ponse du programme.
 */
 void reponse(vector<vector<int>>& clauses,vector<bool>& rep);
 
