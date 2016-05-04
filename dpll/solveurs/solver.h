@@ -10,7 +10,7 @@
 
 class solveur
 {
-    virtual vector<bool> solve(vector<vector<int>>& clauses, int nV);
+    virtual vector<bool> solve(vector<vector<int>>& clauses, int nV)=0;
 };
 
 class solveur_naif : public solveur

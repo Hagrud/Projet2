@@ -110,8 +110,38 @@ char* lire_args(int argc, char* argv[]){
     return file;
 }
 
+char* format_file(char* file)
+{
+    ifstream inStream(file);
+
+    strcat(file, ".tmp");
+    ofstream outStream(file);
+
+    string line;
+    vector<string> lines;
+
+    while(getline(inStream, line))
+    {
+	lines.push_back(line);
+    }
+
+    for(int i = 0; i < (int)lines.size() - 1; i++)
+    {
+	lines[i].push_back('\n');
+    }
+
+    for(int i = 0; i < (int)lines.size(); i++)
+    {
+	outStream << lines[i];
+    }
+
+    return file;
+}
+
 char* create_tseitin(char* file)
 {
+    file = format_file(file);
+    
     freopen(file, "r", stdin);
 
     yyparse();
@@ -161,7 +191,7 @@ char* create_tseitin(char* file)
 
     myfile << "p cnf " << var_count << " " << clause_count << endl;
     myfile << result;
-
+    
     return file;
 }
 

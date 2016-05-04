@@ -5,11 +5,13 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>
+#include <algorithm>
 
 #include "parser.h"
 #include "dpll/dpll.h"
 #include "tseitin/expr.hpp"
 #include "tseitin/expr.tab.hpp"
+
 
 extern "C" FILE *yyin;
 extern Expr *res;

@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.2.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.2"
+#define YYBISON_VERSION "3.0.4"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -126,7 +126,7 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef union YYSTYPE YYSTYPE;
+
 union YYSTYPE
 {
 #line 21 "tseitin/expr.ypp" /* yacc.c:355  */
@@ -136,6 +136,8 @@ union YYSTYPE
 
 #line 138 "tseitin/expr.tab.cpp" /* yacc.c:355  */
 };
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -149,7 +151,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 153 "tseitin/expr.tab.cpp" /* yacc.c:358  */
+#line 155 "tseitin/expr.tab.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1227,59 +1229,59 @@ yyreduce:
         case 2:
 #line 46 "tseitin/expr.ypp" /* yacc.c:1646  */
     { res = (yyvsp[0].exp); }
-#line 1231 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
+#line 1233 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
 #line 50 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new EConst((yyvsp[0].ival));                       }
-#line 1237 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
+#line 1239 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
 #line 51 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = (yyvsp[-1].exp);                                      }
-#line 1243 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
+#line 1245 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
 #line 52 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new EOr((yyvsp[-2].exp), (yyvsp[0].exp));                }
-#line 1249 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
+#line 1251 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 53 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new EAnd((yyvsp[-2].exp), (yyvsp[0].exp));                }
-#line 1255 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
+#line 1257 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
 #line 54 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new ENeg((yyvsp[0].exp)); }
-#line 1261 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
+#line 1263 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
 #line 55 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new EAnd(new EOr((yyvsp[-2].exp), (yyvsp[0].exp)), new ENeg(new EAnd((yyvsp[-2].exp), (yyvsp[0].exp)))); }
-#line 1267 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
+#line 1269 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 9:
 #line 56 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new EOr(new ENeg((yyvsp[-2].exp)), (yyvsp[0].exp)); }
-#line 1273 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
+#line 1275 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
   case 10:
 #line 57 "tseitin/expr.ypp" /* yacc.c:1646  */
     { (yyval.exp) = new EOr(new EAnd((yyvsp[-2].exp), (yyvsp[0].exp)), new EAnd(new ENeg((yyvsp[-2].exp)), new ENeg((yyvsp[0].exp)))); }
-#line 1279 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
+#line 1281 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 1283 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
+#line 1285 "tseitin/expr.tab.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
