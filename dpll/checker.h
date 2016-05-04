@@ -4,6 +4,9 @@
 #include <vector>
 #include <string>
 
+#include "../objets/literal.h"
+#include "../objets/clause.h"
+
 using namespace std;
 
 /**
@@ -13,5 +16,9 @@ using namespace std;
 bool check(vector<vector<int>>& clauses, vector<bool>& varsStates);
 
 bool checkWithNull(vector<vector<int>>& clauses, vector<int>& varsStates);
+
+bool check(vector<Clause*>& clauses, vector<Literal>& literals);
+
+bool checkWithNull(vector<Clause*>& clauses, vector<Literal>& literals);
 
 unsigned int get_clause_issue_id();

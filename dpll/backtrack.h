@@ -8,6 +8,14 @@
 #include "deduction.h"
 #include "graph.h"
 
+#include "../objets/literal.h"
+
+/**
+*
+*
+*/
+bool backtrack(vector<Literal>& literals, vector<int>& paris);
+
 /**
 *@desc fait le backtracking si necessaire.
 *@return renvois True si le programme est fini (on a une clause satisfiable ou on est sur que ce n'est pas satisfiable).

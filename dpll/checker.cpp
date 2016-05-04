@@ -55,6 +55,63 @@ bool checkWithNull(vector<vector<int>>& clauses, vector<int>& varsStates){
 	return true;
 }
 
+bool check(vector<Clause*>& clauses, vector<Literal>& literals){
+    for(Clause* c:clauses){
+
+        if(c->isValid())
+            continue;
+
+        vector<int> clause = c->getVariables();
+        if(clause.empty()){return false;}
+
+        bool state = false;
+        for(int var:clause){
+            if( (var>0) == (literals[abs(var)].getValue()) ){
+
+                Literal &lit = literals[abs(var)];
+                lit.addValidate_Clause(c);
+
+                state = true;
+                break;
+            }
+        }
+        if(!state){
+            return false;
+        }
+    }
+    return true;
+}
+
+bool checkWithNull(vector<Clause*>& clauses, vector<Literal>& literals){
+    for(Clause* c : clauses){
+
+        if(c->isValid())
+            continue;
+
+        vector<int> clause = c->getVariables();
+        if(clause.empty()){return false;}
+
+        bool state = false;
+        for(int var:clause){
+            if(((var>0) == (literals[abs(var)].getValue())) || !literals[abs(var)].isFixed()){
+
+                if(literals[abs(var)].isFixed()){
+                    Literal &lit = literals[abs(var)];
+                    lit.addValidate_Clause(c);
+                }
+
+                state = true;
+                break;
+            }
+        }
+        if(!state){
+            return false;
+        }
+    }
+    return true;
+}
+
+
 unsigned int get_clause_issue_id(){
 	return clause_issue;
 }

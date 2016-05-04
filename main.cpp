@@ -47,8 +47,14 @@ int main(int argc, char* argv[]){
         return 0;
     }
 
-	init();
-    vector<bool> rep = dpll(clauses, parsed.second, !(get_option("cl-interac") || get_option("wl")));
+    Parieur parieur = Parieur();
+    solveur *solveur = new Solveur_deduction(parieur);
+
+    vector<bool> rep = solveur->solve(clauses, parsed.second);
+
+
+	//init();
+    //vector<bool> rep = dpll(clauses, parsed.second, !(get_option("cl-interac") || get_option("wl")));
     //vector<bool> rep = dpll_naif(clauses, parsed.second);
     reponse(clauses, rep);
 
@@ -66,7 +72,16 @@ void reponse(vector<vector<int>>& clauses,vector<bool>& rep){
         }
         cout << 0 << endl;
     }
-    else{cout << "s UNSATISFIABLE" << endl;}
+    else{
+        cout << "s UNSATISFIABLE" << endl;
+        for(unsigned int i = 0;i<rep.size();i++){
+            if(rep[i])
+                cout << i+1 << " ";
+            else
+                cout << "-" << i+1 << " ";
+        }
+        cout << 0 << endl;
+    }
 }
 
 char* lire_args(int argc, char* argv[]){

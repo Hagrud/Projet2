@@ -7,14 +7,20 @@
 #include "../dpll.h"
 
 #include "../../objets/literal.h"
+#include "../../objets/clause.h"
 
 class solveur
 {
+    public:
     virtual vector<bool> solve(vector<vector<int>>& clauses, int nV)=0;
+
+    protected:
+    vector<bool> to_vector(vector<Literal>& literals);
 };
 
 class solveur_naif : public solveur
 {
+    public:
     vector<bool> solve(vector<vector<int>>& clauses, int nV);
 };
 
