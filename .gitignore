@@ -31,6 +31,8 @@
 *.depend
 *.cbp
 *.layout
+.*
+*.*~
 
 test/CBS
 test/uf

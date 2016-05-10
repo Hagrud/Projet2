@@ -28,9 +28,11 @@ vector<bool> Solveur_deduction::solve(vector<vector<int>>& clauses_, int nV){
 		deduction(clauses, literals, paris);
 
         if(!checkWithNull(clauses, literals)){  //On verifie si on est pas dans une impasse.
+        	//cout << "backtack 1" << endl;
             if(!backtrack(clauses, literals, paris)){
                 return to_vector(literals);
             }
+            deduction(clauses, literals, paris);
         }
         else{
 
@@ -39,14 +41,16 @@ vector<bool> Solveur_deduction::solve(vector<vector<int>>& clauses_, int nV){
         }
 
         if(!parieur.parier(literals, paris)){   //On fait un paris.
-
-            if(!backtrack(clauses, literals, paris)){
+        	//cout << "backtack 2" << endl;
+            if(!Solveur_deduction::backtrack(clauses, literals, paris)){
                 return to_vector(literals);
             }
 
         }
 
     }
+
+    return to_vector(literals);
 }
 
 bool Solveur_deduction::backtrack(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris){
@@ -66,6 +70,7 @@ bool Solveur_deduction::backtrack(vector<Clause*>& clauses, vector<Literal>& lit
     lit.clearDeduct();
     lit.setValue(!lit.getValue());
     lit.setPari(false);
+    lit.setBackTracked(true);
 
     Literal &precedent = literals[paris.back()];
     precedent.addDeduct(lit.getId());

@@ -3,7 +3,7 @@
 bool Parieur::parier(vector<Literal>& literals, vector<int>& paris){
     for(Literal &lit : literals){
         if(!lit.isFixed()){
-            cout << "paris : " << lit.getId() << endl;
+            //cout << "paris : " << lit.getId() << endl;
             paris.push_back(lit.getId());
 
             lit.setFixed(true);

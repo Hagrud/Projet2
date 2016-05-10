@@ -42,17 +42,3 @@ char* create_tseitin(char* file);
 bool get_option(string option);
 
 void init();
-
-/**
-*@desc Contient les variables globales.
-*/
-class global
-{
-    public:
-    static bool DLIS;
-    static bool MOMS;
-    static bool RAND;
-    static bool TSEITIN;
-    static bool INTERACT;
-    static bool WL;
-};

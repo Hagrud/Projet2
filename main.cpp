@@ -1,12 +1,5 @@
 #include "main.h"
 
-bool global::DLIS = false;
-bool global::INTERACT = false;
-bool global::MOMS = false;
-bool global::RAND = false;
-bool global::TSEITIN = false;
-bool global::WL = false;
-
 typedef struct Option Option;
 struct Option {
     string name;
@@ -44,9 +37,9 @@ int main(int argc, char* argv[]){
     
     Parieur parieur = Parieur();
     solveur *solveur;
+
     if(get_option("cl-interac")){
       solveur = new Solveur_cl(parieur);
-      cout << "solveur_cl" << endl;
     }
     else{
       solveur = new Solveur_deduction(parieur);
@@ -55,7 +48,7 @@ int main(int argc, char* argv[]){
     vector<bool> rep = solveur->solve(clauses, parsed.second);
 
 
-	  //init();
+	//init();
     //vector<bool> rep = dpll(clauses, parsed.second, !(get_option("cl-interac") || get_option("wl")));
     //vector<bool> rep = dpll_naif(clauses, parsed.second);
     reponse(clauses, rep);
@@ -230,13 +223,6 @@ bool get_option(string option){
 }
 
 void init(){
-    global::DLIS = get_option("dlis");
-    global::INTERACT = get_option("-cl-interac");
-    global::MOMS = get_option("moms");
-    global::RAND = get_option("rand");
-    global::TSEITIN = get_option("tseitin");
-    global::WL = get_option("wl");
-
 	set_option(get_option("rand"), get_option("moms"));
 	init_graph_cpp(get_option("cl-interac"));
 }

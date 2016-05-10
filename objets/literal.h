@@ -33,13 +33,17 @@ class Literal{
         void addValidate_Clause(Clause* clause);
         Clause* get_first_validate_clause();
 
+        bool isBackTracked();
+        void setBackTracked(bool b);
+
     private:
-        bool value;
+        bool value = false;
         int id;
         vector<int> deductions;
         bool pari;
         bool fixed;
         vector<Clause*> validate_clauses;
+        bool backtracked;
 };
 
 #endif

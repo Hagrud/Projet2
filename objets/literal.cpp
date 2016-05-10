@@ -7,6 +7,7 @@ Literal::Literal(){
     validate_clauses.resize(0);
     pari=true;
     fixed=true;
+    backtracked = false;
 }
 Literal::Literal(int n){
     id = n;
@@ -14,6 +15,7 @@ Literal::Literal(int n){
     validate_clauses.resize(0);
     pari = n==0;
     fixed = n==0;
+    backtracked = false;
 }
 
 int Literal::getId(){
@@ -38,6 +40,7 @@ void Literal::setPari(bool b){
 
 void Literal::setFixed(bool b){
     fixed = b;
+    setBackTracked(false);
     clearValidate_Clauses();
 }
 
@@ -51,10 +54,13 @@ vector<int> Literal::getDeductions(){
 }
 
 void Literal::addDeduct(int dedu){
+	//cout << "add " << dedu << " to " << getId() << " with size " << deductions.size() << endl;
     deductions.push_back(dedu);
 }
 
 void Literal::clearDeduct(){
+	//cout << "clear...................................................." << endl;
+	//cout << "clear : " << getId() << endl;
     deductions.resize(0);
 }
 
@@ -74,4 +80,11 @@ Clause* Literal::get_first_validate_clause(){
   if(validate_clauses.empty())
     return nullptr;
   return validate_clauses[0];
+}
+
+bool Literal::isBackTracked(){
+	return backtracked;
+}
+void Literal::setBackTracked(bool b){
+	 backtracked = b;
 }

@@ -6,7 +6,7 @@ Solveur_cl::Solveur_cl(Parieur p) : Solveur_deduction(p){
 
 void Solveur_cl::deduction(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris){
 	Literal &last_paris = literals[paris.back()];
-  while(dedUnitaire(clauses, literals, last_paris)){}
+	while(dedUnitaire(clauses, literals, last_paris)){}
 }
 
 
@@ -27,20 +27,53 @@ void Solveur_cl::learn_clause(vector<Clause*>& clauses, vector<Literal>& literal
   create_graph(clauses, literals, literals[paris.back()].getDeductions(),
                paris, graph, clauses[conflit], 0);
 
+  //cout << "graph : ["; for(auto p:graph){cout << "[ "; for(auto c:p){cout << " " << c << " ";} cout << " ]" << endl;}cout << " ] " << endl;
+
   /** Recuperation de l'uip **/ 
-  int uip = abs(paris.back());
+  //cout << "pre uip" << endl;
+  int uip = get_uip(graph,literals[paris.back()].getDeductions(), paris.back());
+  //cout << "post uip" << endl;
   
+  //cout << "uip : " << uip << endl;
+  //cout << "deductions [ ";for(auto p : literals[paris.back()].getDeductions()){cout << " " << p << " ";}cout << " ]" << endl;
+
   /** Affichage **/
   afficher_graphe(literals, graph, literals[paris.back()].getDeductions(), uip);
   
   /** Clause learning **/
-  
+  learn(clauses, graph, literals, literals[paris.back()].getDeductions(),uip);
+}
+
+void Solveur_cl::learn(vector<Clause*>& clauses, vector<vector<int>>& graph, vector<Literal>& literals, vector<int> deduction,int uip){
+	vector<int> clause;
+	clause.resize(0);
+	vector<int> chemin;
+
+	for(int i = 0; i <(int) graph.size(); i++){
+		if(find(deduction.begin(), deduction.end(), i) != deduction.end() && i != uip){
+			continue;
+		}
+		chemin.resize(0);
+
+		if(found_chemin(graph, chemin, uip, i)){
+			if(literals[i].getValue())
+				clause.push_back(-i);
+			else
+				clause.push_back(i);
+
+		}
+	}
+
+	//cout << "learn : ["; for(auto p : clause){cout << " " << p << " ";}cout << " ]" <<endl;
+	clauses.push_back(new Clause(clause));
 }
 
 void Solveur_cl::create_graph(vector<Clause*>& clauses, vector<Literal>& literals,
                   vector<int> deduction,
                   vector<int>& paris, vector<vector<int>>& graph,
                   Clause* clause, int var_id){
+
+
   
   /** Si la variables precedentes est un paris on stop **/
   if(clause == nullptr){
@@ -50,6 +83,12 @@ void Solveur_cl::create_graph(vector<Clause*>& clauses, vector<Literal>& literal
     return;
   }
   
+  //variables backtracked
+  if(literals[abs(var_id)].isBackTracked()){
+	  graph[paris.back()].push_back(var_id);
+	  return;
+  }
+
   /** Pour chaque variables dans la clause en cause on va l'ajouter au graphe si besoin. **/
   
   for(int var:clause->getVariables()){
@@ -71,12 +110,75 @@ void Solveur_cl::create_graph(vector<Clause*>& clauses, vector<Literal>& literal
   
 }
 
+int Solveur_cl::get_uip(vector<vector<int>>& graph, vector<int> possible_uip, int paris){
 
+	//cout << "graph : [ "; for(auto c : graph){cout << " [ "; for(auto p : c){cout << " " << p << " ";}cout << " ]" << endl;}cout << " ]" << endl;
 
+	vector<int> chemin;
+	chemin.resize(0);
+	found_chemin(graph, chemin, 0, paris);	//Problème sur le found chemin
+	possible_uip = vector_and(chemin, possible_uip);
+	int interdit;
+
+	while(!possible_uip.empty()){
+		//cout << "possible [ "; for(auto p : possible_uip){cout << " " << p << " ";}cout << "]" << endl;
+		interdit = possible_uip.back();
+		chemin.resize(0);
+		if(!found_chemin(graph, chemin, interdit, paris)){
+			return interdit;
+		}
+		possible_uip = vector_and(chemin, possible_uip);
+	}
+
+	return paris;
+}
+
+bool Solveur_cl::found_chemin(vector<vector<int>>& graph, vector<int>& chemin, int interdit, int sommet){
+	//cout << "found chemin" << endl;
+	//cout << "sommet : " << sommet << endl;
+	for(int voisin : graph[sommet]){
+		voisin = abs(voisin);
+		//cout << sommet << " : voisin : " << voisin << endl;
+		if(voisin == 0)
+			return true;
+		if(voisin == interdit)
+			continue;
+
+		//Devrait pas arriver
+		//if(find(chemin.begin(), chemin.end(), voisin) != chemin.end())
+		//	continue;
+
+		chemin.push_back(voisin);
+
+		if(found_chemin(graph, chemin, interdit, voisin))
+			return true;
+
+		chemin.pop_back();
+	}
+
+	return false;
+}
+
+vector<int> Solveur_cl::vector_and(vector<int> a, vector<int> b){
+	vector<int> retour;
+	retour.resize(0);
+
+	//cout << "a [ "; for(auto p : a){cout << " " << p << " ";}cout << "]" << endl;
+	//cout << "b [ "; for(auto p : b){cout << " " << p << " ";}cout << "]" << endl;
+
+	for(int u: a){
+		if(find(b.begin(), b.end(), u) != b.end()){
+			retour.push_back(u);
+		}
+	}
+
+	//cout << "r [ "; for(auto p : retour){cout << " " << p << " ";}cout << "]" << endl;
+	return retour;
+}
 
 void Solveur_cl::afficher_graphe(vector<Literal>& literals, vector<vector<int>>& graph, vector<int> deduction, int uip){
   
-  cout << "deductions : ["; for(auto p : deduction){cout << " " << p << " ";}
+  //cout << "deductions : ["; for(auto p : deduction){cout << " " << p << " ";}
   if(!show_graph){
     return;
   }
