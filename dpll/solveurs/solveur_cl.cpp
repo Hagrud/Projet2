@@ -38,7 +38,7 @@ void Solveur_cl::learn_clause(vector<Clause*>& clauses, vector<Literal>& literal
   //cout << "deductions [ ";for(auto p : literals[paris.back()].getDeductions()){cout << " " << p << " ";}cout << " ]" << endl;
 
   /** Affichage **/
-  afficher_graphe(literals, graph, literals[paris.back()].getDeductions(), uip);
+  afficher_graphe(literals, graph, literals[paris.back()].getDeductions(), uip, paris.back());
   
   /** Clause learning **/
   learn(clauses, graph, literals, literals[paris.back()].getDeductions(),uip);
@@ -64,7 +64,7 @@ void Solveur_cl::learn(vector<Clause*>& clauses, vector<vector<int>>& graph, vec
 		}
 	}
 
-	//cout << "learn : ["; for(auto p : clause){cout << " " << p << " ";}cout << " ]" <<endl;
+	cout << "learn : ["; for(auto p : clause){cout << " " << p << " ";}cout << " ]" <<endl;
 	clauses.push_back(new Clause(clause));
 }
 
@@ -116,7 +116,7 @@ int Solveur_cl::get_uip(vector<vector<int>>& graph, vector<int> possible_uip, in
 
 	vector<int> chemin;
 	chemin.resize(0);
-	found_chemin(graph, chemin, 0, paris);	//Problème sur le found chemin
+	found_chemin(graph, chemin, 0, paris);	//Probl?me sur le found chemin
 	possible_uip = vector_and(chemin, possible_uip);
 	int interdit;
 
@@ -176,7 +176,7 @@ vector<int> Solveur_cl::vector_and(vector<int> a, vector<int> b){
 	return retour;
 }
 
-void Solveur_cl::afficher_graphe(vector<Literal>& literals, vector<vector<int>>& graph, vector<int> deduction, int uip){
+void Solveur_cl::afficher_graphe(vector<Literal>& literals, vector<vector<int>>& graph, vector<int> deduction, int uip, int paris){
   
   //cout << "deductions : ["; for(auto p : deduction){cout << " " << p << " ";}
   if(!show_graph){
@@ -209,6 +209,12 @@ void Solveur_cl::afficher_graphe(vector<Literal>& literals, vector<vector<int>>&
     fichier << "digraph G {" << endl;
     fichier << "conflit  [style=filled,color=red];" << endl;
     
+    if(paris != uip){
+      if(!literals[paris].getValue())
+        paris = - paris;
+      fichier << paris << " [style=filled,color=blue];" << endl;
+    }
+    
     for(int var:deduction){
       if(!graph[abs(var)].empty() && abs(var) != uip){
         if(literals[var].getValue())
@@ -217,6 +223,8 @@ void Solveur_cl::afficher_graphe(vector<Literal>& literals, vector<vector<int>>&
           fichier << -var << " [style=filled,color=cyan];" << endl;
       }
     }
+    if(!literals[uip].getValue())
+      uip = -uip;
     fichier << uip << " [style=filled,color=yellow];" << endl;
     
     for(int sommet_id = 1; sommet_id<(int) graph.size(); sommet_id++){

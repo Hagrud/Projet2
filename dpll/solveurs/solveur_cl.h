@@ -31,7 +31,7 @@ class Solveur_cl : public Solveur_deduction
 		int get_uip(vector<vector<int>>& graph, vector<int> possible_uip,int paris);
 		bool found_chemin(vector<vector<int>>& graph, vector<int>& chemin, int interdit, int sommet);
 		vector<int> vector_and(vector<int> a, vector<int> b);
-		void afficher_graphe(vector<Literal>& literals, vector<vector<int>>& graph, vector<int> deduction, int uip);
+		void afficher_graphe(vector<Literal>& literals, vector<vector<int>>& graph, vector<int> deduction, int uip, int paris);
 
 	private:
 		bool show_graph;

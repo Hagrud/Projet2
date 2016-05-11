@@ -25,23 +25,20 @@ vector<bool> Solveur_deduction::solve(vector<vector<int>>& clauses_, int nV){
 
     while(true){
 
-		deduction(clauses, literals, paris);
+		    deduction(clauses, literals, paris);
 
-        if(!checkWithNull(clauses, literals)){  //On verifie si on est pas dans une impasse.
-        	//cout << "backtack 1" << endl;
+        while(!checkWithNull(clauses, literals)){  //On verifie si on est pas dans une impasse.
+        	  //cout << "backtack 1" << endl;
             if(!backtrack(clauses, literals, paris)){
                 return to_vector(literals);
             }
             deduction(clauses, literals, paris);
         }
-        else{
-
-            if(check(clauses, literals))
-                return to_vector(literals);
-        }
+        if(check(clauses, literals))
+            return to_vector(literals);
 
         if(!parieur.parier(literals, paris)){   //On fait un paris.
-        	//cout << "backtack 2" << endl;
+        	  //cout << "backtack 2" << endl;
             if(!Solveur_deduction::backtrack(clauses, literals, paris)){
                 return to_vector(literals);
             }
@@ -54,7 +51,7 @@ vector<bool> Solveur_deduction::solve(vector<vector<int>>& clauses_, int nV){
 }
 
 bool Solveur_deduction::backtrack(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris){
-    //cout << "backtack" << endl;
+    cout << "backtack : " << paris.back() << endl;
     if(paris.size()<=1){
         return false;
     }
