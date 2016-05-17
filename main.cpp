@@ -35,14 +35,21 @@ int main(int argc, char* argv[]){
     }
 
     
-    Parieur parieur = Parieur();
+    Parieur *parieur;
     solveur *solveur;
 
-    if(get_option("cl-interac")){
-      solveur = new Solveur_cl(parieur);
+    if(get_option("rand")){
+    	parieur = new Parieur_rand();
     }
     else{
-      solveur = new Solveur_deduction(parieur);
+    	parieur = new Parieur();
+    }
+
+    if(get_option("cl-interac")){
+      solveur = new Solveur_cl(*parieur);
+    }
+    else{
+      solveur = new Solveur_deduction(*parieur);
     }
 
     vector<bool> rep = solveur->solve(clauses, parsed.second);

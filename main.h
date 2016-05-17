@@ -21,6 +21,7 @@ extern Expr *res;
 #include "dpll/graph.h"
 
 #include "dpll/parieurs/parieur.h"
+#include "dpll/parieurs/parieur_rand.h"
 #include "dpll/solveurs/solveur_deduction.h"
 #include "dpll/solveurs/solveur_cl.h"
 

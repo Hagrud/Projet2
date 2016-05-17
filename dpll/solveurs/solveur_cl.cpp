@@ -53,6 +53,8 @@ bool Solveur_cl::backtrack(vector<Clause*>& clauses, vector<Literal>& literals, 
     Literal &precedent = literals[paris.back()];
     precedent.addDeduct(uip.getId());
     uip.setLevel(precedent.getLevel());
+    uip.clearValidate_Clauses();
+    uip.addValidate_Clause(last);
 
 
     return true;

@@ -11,7 +11,8 @@ using namespace std;
 class Parieur
 {
     public:
-        bool parier(vector<Literal>& literals, vector<int>& paris);
+        virtual bool parier(vector<Literal>& literals, vector<int>& paris);
+        virtual ~Parieur(){};
 };
 
 #endif // DEF_PARIEUR

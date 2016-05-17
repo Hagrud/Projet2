@@ -1,3 +1,27 @@
+﻿/**
+*
+*Rendu 4
+*
+**/
+Travail principale sur le rendu :
+	On a passee beaucoup de temps pour retravailler le code des rendu précédent qui était trop "bordelique" et qui induisait pleins d'erreur a chaque implementation de nouvelles fonctionnalitees.
+		
+		Chaque variables est maintenant representee par un type de donnee "literal" qui contient :
+			- un id : la "valeur absolue" du nom de la variable.
+			- son etat : vrai/faux paris...
+			- les deductions induites.
+			- les clauses qu'elle a validee (une partie).
+
+		Les clauses sont aussi representee par un type de donnee "clause" qui contient :
+			- la valeur de la clause.
+			- un boolean qui indique si la clause est deja valide ou non.
+		Il n'y rien de plus car on n'a pas eu le temps de refaire les watched literals avec les nouveaux types de donnees.
+
+		
+		Pour les paris :
+			On a remplacer la classe paris.cpp par des "parieur" a instancier et a passer en argument du solveur dpll.
+
+
 /**
 *
 *Rendu 3
