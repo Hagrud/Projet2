@@ -1,10 +1,7 @@
 #include <vector>
 
 #include "../checker.h"
-#include "../paris.h"
 #include "../deduction.h"
-#include "../backtrack.h"
-#include "../dpll.h"
 
 #include "../../objets/literal.h"
 #include "../../objets/clause.h"
@@ -16,8 +13,8 @@ class solveur
 {
     public:
 	/**
-	 * Résout l'instance de SAT.
-	 * #clauses 	les clauses à valider.
+	 * R?sout l'instance de SAT.
+	 * #clauses 	les clauses ? valider.
 	 * #nV			nombres de variables.
 	 * @return 		une instance des variables valide si il en existe.
 	 */
@@ -25,7 +22,7 @@ class solveur
 
     protected:
     /**
-     * Retourne un vecteur d'entier à la place du vecteur de Literal.
+     * Retourne un vecteur d'entier ? la place du vecteur de Literal.
      */
     vector<bool> to_vector(vector<Literal>& literals);
 };
@@ -38,6 +35,7 @@ class solveur_naif : public solveur
 {
     public:
     vector<bool> solve(vector<vector<int>>& clauses, int nV);
+    bool dpll_rec(vector<vector<int>>& clauses, vector<bool>& varsStates, int nV, int pos);
 };
 
 

@@ -10,12 +10,10 @@
 using namespace std;
 
 /**
-* @desc Vérifie qu'une instance de variables vérifie un problème de type SAT.
-* @return True si toutes les clauses sont vérifiées.
+* @desc V?rifie qu'une instance de variables v?rifie un probl?me de type SAT.
+* @return True si toutes les clauses sont v?rifi?es.
 */
 bool check(vector<vector<int>>& clauses, vector<bool>& varsStates);
-
-bool checkWithNull(vector<vector<int>>& clauses, vector<int>& varsStates);
 
 bool check(vector<Clause*>& clauses, vector<Literal>& literals);
 

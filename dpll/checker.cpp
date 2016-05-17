@@ -27,34 +27,6 @@ bool check(vector<vector<int>>& clauses, vector<bool>& varsStates){
 	return true;
 }
 
-bool checkWithNull(vector<vector<int>>& clauses, vector<int>& varsStates){
-
-    for(unsigned int clause_id = 0; clause_id<clauses.size(); clause_id++){
-		vector<int> vec = clauses[clause_id];
-		bool state = false;
-		if(vec.empty()){return false;}
-		for(auto var: vec){
-			if(var<0){
-				if(varsStates[-var-1] == -1 || varsStates[-var-1]==0){
-					state = true;
-					break;
-				}
-			}
-			else{
-				if(varsStates[var-1] == -1 || varsStates[var-1]==1){
-					state = true;
-					break;
-				}
-			}
-		}
-		if(!state){
-			clause_issue = clause_id;
-			return false;
-		}
-	}
-	return true;
-}
-
 bool check(vector<Clause*>& clauses, vector<Literal>& literals){
     for(Clause* c:clauses){
 

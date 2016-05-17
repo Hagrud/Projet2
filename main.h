@@ -8,17 +8,12 @@
 #include <algorithm>
 
 #include "parser.h"
-#include "dpll/dpll.h"
 #include "tseitin/expr.hpp"
 #include "tseitin/expr.tab.hpp"
 
 
 extern "C" FILE *yyin;
 extern Expr *res;
-
-
-#include "dpll/paris.h"
-#include "dpll/graph.h"
 
 #include "dpll/parieurs/parieur.h"
 #include "dpll/parieurs/parieur_rand.h"
@@ -43,5 +38,3 @@ void reponse(vector<vector<int>>& clauses,vector<bool>& rep);
 char* create_tseitin(char* file);
 
 bool get_option(string option);
-
-void init();

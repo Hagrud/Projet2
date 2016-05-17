@@ -2,12 +2,16 @@
 #define DEF_SOLVEUR_CL
 
 
+#include <algorithm>
+#include <iostream>
+#include <stdlib.h>
+#include <string>
+#include <fstream>
+
 #include "solveur_deduction.h"
 
 #include "../parieurs/parieur.h"
-#include "../backtrack.h"
 #include "../checker.h"
-#include "../graph.h"
 
 #include "../../smt/smt.h"
 

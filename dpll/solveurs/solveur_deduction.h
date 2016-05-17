@@ -5,7 +5,6 @@
 #include "solver.h"
 
 #include "../parieurs/parieur.h"
-#include "../backtrack.h"
 #include "../checker.h"
 
 #include "../../smt/smt.h"

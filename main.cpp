@@ -218,8 +218,3 @@ bool get_option(string option){
 	}
 	return false;
 }
-
-void init(){
-	set_option(get_option("rand"), get_option("moms"));
-	init_graph_cpp(get_option("cl-interac"));
-}
