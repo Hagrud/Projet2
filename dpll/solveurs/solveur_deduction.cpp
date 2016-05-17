@@ -71,6 +71,7 @@ bool Solveur_deduction::backtrack(vector<Clause*>& clauses, vector<Literal>& lit
 
     Literal &precedent = literals[paris.back()];
     precedent.addDeduct(lit.getId());
+    lit.setLevel(precedent.getLevel());
     //cout << "paris : [ "; for(auto p:paris){cout << p << " ";} cout << "]" << endl;
     //cout << "deduction : [ "; for(auto p:literals[paris.back()].getDeductions()){cout << p << " ";}cout << "]" << endl;
     return true;

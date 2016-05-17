@@ -12,13 +12,52 @@ void Solveur_cl::deduction(vector<Clause*>& clauses, vector<Literal>& literals, 
 
 bool Solveur_cl::backtrack(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris){
   //cout << "backtrack cl" << endl;
-	learn_clause(clauses, literals, paris);
-	return Solveur_deduction::backtrack(clauses, literals, paris);
+	Literal& uip = literals[learn_clause(clauses, literals, paris)];
+
+	if(uip.getId() == 0)
+		return false;
+
+	Clause* last = clauses.back();
+	int max = 0;
+	for(int var : last->getVariables()){
+		if(abs(var) == uip.getId()){
+			if(var<0)
+				uip.setValue(false);
+			else
+				uip.setValue(true);
+		}
+		else if(literals[abs(var)].getLevel() > max)
+			max = literals[abs(var)].getLevel();
+	}
+
+	while(paris.size() > (unsigned int)max+1){
+		Solveur_deduction::backtrack(clauses, literals, paris);
+	}
+
+	Literal &lit = literals[paris.back()];
+	paris.pop_back();
+
+	for(int deduction : lit.getDeductions()){
+	        Literal &ded = literals[deduction];
+	        ded.setFixed(false);
+	}
+
+    lit.clearDeduct();
+    lit.setFixed(false);
+    lit.setPari(false);
+
+    Literal &precedent = literals[paris.back()];
+    precedent.addDeduct(uip.getId());
+    uip.setLevel(precedent.getLevel());
+
+
+    return true;
+	//return Solveur_deduction::backtrack(clauses, literals, paris);
 }
 
-void Solveur_cl::learn_clause(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris){
+int Solveur_cl::learn_clause(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris){
   if(paris.size() == 1) //Un conflit sans paris -> non satisfiable.
-      return;
+      return 0;
   
   unsigned int conflit = get_clause_issue_id();
   
@@ -42,6 +81,7 @@ void Solveur_cl::learn_clause(vector<Clause*>& clauses, vector<Literal>& literal
   
   /** Clause learning **/
   learn(clauses, graph, literals, literals[paris.back()].getDeductions(),uip);
+  return uip;
 }
 
 void Solveur_cl::learn(vector<Clause*>& clauses, vector<vector<int>>& graph, vector<Literal>& literals, vector<int> deduction,int uip){

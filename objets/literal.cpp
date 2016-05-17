@@ -88,3 +88,10 @@ bool Literal::isBackTracked(){
 void Literal::setBackTracked(bool b){
 	 backtracked = b;
 }
+
+void Literal::setLevel(int lvl){
+	level = lvl;
+}
+int Literal::getLevel(){
+	return level;
+}

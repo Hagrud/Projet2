@@ -10,6 +10,8 @@ bool Parieur::parier(vector<Literal>& literals, vector<int>& paris){
             lit.setPari(true);
             lit.setValue(true);
 
+            lit.setLevel(literals[paris[paris.size()-2]].getLevel() + 1);
+
             return true;
         }
 

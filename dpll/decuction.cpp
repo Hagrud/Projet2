@@ -38,6 +38,7 @@ bool dedUnitaire(vector<Clause *>& clauses, vector<Literal>& literals, Literal &
             lit.addValidate_Clause(clause);
 
             paris.addDeduct(lit.getId());
+            lit.setLevel(paris.getLevel());
 
             //cout << paris.getId() <<  " deduit : " << lit.getId() << endl;
             return true;

@@ -17,7 +17,7 @@ class Solveur_cl : public Solveur_deduction
 
 	protected:
 		bool backtrack(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris);
-		void learn_clause(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris);
+		int learn_clause(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris);
 		void learn(vector<Clause*>& clauses, vector<vector<int>>& graph, vector<Literal>& literals,vector<int> deduction, int uip);
 		
 		void create_graph(vector<Clause*>& clauses, 

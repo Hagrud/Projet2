@@ -36,6 +36,9 @@ class Literal{
         bool isBackTracked();
         void setBackTracked(bool b);
 
+        void setLevel(int lvl);
+        int getLevel();
+
     private:
         bool value = false;
         int id;
@@ -44,6 +47,8 @@ class Literal{
         bool fixed;
         vector<Clause*> validate_clauses;
         bool backtracked;
+
+        int level = 0;
 };
 
 #endif
