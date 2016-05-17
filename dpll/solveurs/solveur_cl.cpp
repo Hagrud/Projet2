@@ -11,14 +11,17 @@ void Solveur_cl::deduction(vector<Clause*>& clauses, vector<Literal>& literals, 
 
 
 bool Solveur_cl::backtrack(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris){
-  //cout << "backtrack cl" << endl;
+	//On récupère l'uip et on apprend la nouvelle clause + affichage du graphe.
 	Literal& uip = literals[learn_clause(clauses, literals, paris)];
 
+	//Si l'uip est 0 on ne peut pas backtrack.
 	if(uip.getId() == 0)
 		return false;
 
 	Clause* last = clauses.back();
 	int max = 0;
+
+	//On cherche le rang maximum de la nouvelle clause.
 	for(int var : last->getVariables()){
 		if(abs(var) == uip.getId()){
 			if(var<0)
@@ -30,6 +33,7 @@ bool Solveur_cl::backtrack(vector<Clause*>& clauses, vector<Literal>& literals, 
 			max = literals[abs(var)].getLevel();
 	}
 
+	//On détruit toutes les déductions et les paris fait après ce rang.
 	while(paris.size() > (unsigned int)max+1){
 		Solveur_deduction::backtrack(clauses, literals, paris);
 	}
@@ -52,35 +56,30 @@ bool Solveur_cl::backtrack(vector<Clause*>& clauses, vector<Literal>& literals, 
 
 
     return true;
-	//return Solveur_deduction::backtrack(clauses, literals, paris);
 }
 
 int Solveur_cl::learn_clause(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris){
-  if(paris.size() == 1) //Un conflit sans paris -> non satisfiable.
+	//Un conflit sans paris -> non satisfiable.
+  if(paris.size() == 1)
       return 0;
   
+  //On récupère la clause du conflit.
   unsigned int conflit = get_clause_issue_id();
   
-  /** Construction du graphe **/
+  //On construit le graphe.
   vector<vector<int>> graph(literals.size(), vector<int>());
   create_graph(clauses, literals, literals[paris.back()].getDeductions(),
                paris, graph, clauses[conflit], 0);
 
-  //cout << "graph : ["; for(auto p:graph){cout << "[ "; for(auto c:p){cout << " " << c << " ";} cout << " ]" << endl;}cout << " ] " << endl;
-
-  /** Recuperation de l'uip **/ 
-  //cout << "pre uip" << endl;
+  //On récupère l'uip.
   int uip = get_uip(graph,literals[paris.back()].getDeductions(), paris.back());
-  //cout << "post uip" << endl;
-  
-  //cout << "uip : " << uip << endl;
-  //cout << "deductions [ ";for(auto p : literals[paris.back()].getDeductions()){cout << " " << p << " ";}cout << " ]" << endl;
 
-  /** Affichage **/
+  //On affiche le graphe.
   afficher_graphe(literals, graph, literals[paris.back()].getDeductions(), uip, paris.back());
   
-  /** Clause learning **/
+  //On apprend la clause.
   learn(clauses, graph, literals, literals[paris.back()].getDeductions(),uip);
+
   return uip;
 }
 
@@ -104,7 +103,6 @@ void Solveur_cl::learn(vector<Clause*>& clauses, vector<vector<int>>& graph, vec
 		}
 	}
 
-	cout << "learn : ["; for(auto p : clause){cout << " " << p << " ";}cout << " ]" <<endl;
 	clauses.push_back(new Clause(clause));
 }
 
@@ -133,7 +131,7 @@ void Solveur_cl::create_graph(vector<Clause*>& clauses, vector<Literal>& literal
   
   for(int var:clause->getVariables()){
     if(abs(var)==abs(var_id)){continue;}
-    //cout << var_id << "var in clause : " << var << endl;
+
     /** Si l'on a jamais vu la variable **/
     if(graph[abs(var)].empty()){
       graph[abs(var)].push_back(var_id);
@@ -152,16 +150,13 @@ void Solveur_cl::create_graph(vector<Clause*>& clauses, vector<Literal>& literal
 
 int Solveur_cl::get_uip(vector<vector<int>>& graph, vector<int> possible_uip, int paris){
 
-	//cout << "graph : [ "; for(auto c : graph){cout << " [ "; for(auto p : c){cout << " " << p << " ";}cout << " ]" << endl;}cout << " ]" << endl;
-
 	vector<int> chemin;
 	chemin.resize(0);
-	found_chemin(graph, chemin, 0, paris);	//Probl?me sur le found chemin
+	found_chemin(graph, chemin, 0, paris);
 	possible_uip = vector_and(chemin, possible_uip);
 	int interdit;
 
 	while(!possible_uip.empty()){
-		//cout << "possible [ "; for(auto p : possible_uip){cout << " " << p << " ";}cout << "]" << endl;
 		interdit = possible_uip.back();
 		chemin.resize(0);
 		if(!found_chemin(graph, chemin, interdit, paris)){
@@ -174,19 +169,13 @@ int Solveur_cl::get_uip(vector<vector<int>>& graph, vector<int> possible_uip, in
 }
 
 bool Solveur_cl::found_chemin(vector<vector<int>>& graph, vector<int>& chemin, int interdit, int sommet){
-	//cout << "found chemin" << endl;
-	//cout << "sommet : " << sommet << endl;
 	for(int voisin : graph[sommet]){
 		voisin = abs(voisin);
-		//cout << sommet << " : voisin : " << voisin << endl;
+
 		if(voisin == 0)
 			return true;
 		if(voisin == interdit)
 			continue;
-
-		//Devrait pas arriver
-		//if(find(chemin.begin(), chemin.end(), voisin) != chemin.end())
-		//	continue;
 
 		chemin.push_back(voisin);
 
@@ -203,27 +192,22 @@ vector<int> Solveur_cl::vector_and(vector<int> a, vector<int> b){
 	vector<int> retour;
 	retour.resize(0);
 
-	//cout << "a [ "; for(auto p : a){cout << " " << p << " ";}cout << "]" << endl;
-	//cout << "b [ "; for(auto p : b){cout << " " << p << " ";}cout << "]" << endl;
-
 	for(int u: a){
 		if(find(b.begin(), b.end(), u) != b.end()){
 			retour.push_back(u);
 		}
 	}
 
-	//cout << "r [ "; for(auto p : retour){cout << " " << p << " ";}cout << "]" << endl;
 	return retour;
 }
 
 void Solveur_cl::afficher_graphe(vector<Literal>& literals, vector<vector<int>>& graph, vector<int> deduction, int uip, int paris){
   
-  //cout << "deductions : ["; for(auto p : deduction){cout << " " << p << " ";}
   if(!show_graph){
     return;
   }
   
-  /** EntrÃ©e utilisateur **/
+  /** Entrée utilisateur **/
   string in;
   while(true){
     cout << "conflit : (g c t)" << endl;
