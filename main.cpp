@@ -73,13 +73,6 @@ void reponse(vector<vector<int>>& clauses,vector<bool>& rep){
     }
     else{
         cout << "s UNSATISFIABLE" << endl;
-        for(unsigned int i = 0;i<rep.size();i++){
-            if(rep[i])
-                cout << i+1 << " ";
-            else
-                cout << "-" << i+1 << " ";
-        }
-        cout << 0 << endl;
     }
 }
 
