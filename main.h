@@ -25,6 +25,8 @@ extern Expr *res;
 #include "dpll/solveurs/solveur_deduction.h"
 #include "dpll/solveurs/solveur_cl.h"
 
+#include "smt/smt.h"
+
 using namespace std;
 
 /**

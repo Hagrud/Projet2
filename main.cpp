@@ -12,7 +12,8 @@ static Option options[] = {
     {"Maximum Occurrences in clauses of Minimum Size",  "-moms",    	false},
     {"Random",                                          "-rand",    	false},
     {"Tseitin",                                         "-tseitin", 	false},
-	{"Exploration de conflit",							"-cl-interac", 	false},
+	  {"Exploration de conflit",							            "-cl-interac",false},
+	  {"Satisfiability Modulo Theories",                  "-smt",       false},
     {"watched literals",                                "-wl",      	false},
     {"", "", false}};
 
@@ -54,10 +55,6 @@ int main(int argc, char* argv[]){
 
     vector<bool> rep = solveur->solve(clauses, parsed.second);
 
-
-	//init();
-    //vector<bool> rep = dpll(clauses, parsed.second, !(get_option("cl-interac") || get_option("wl")));
-    //vector<bool> rep = dpll_naif(clauses, parsed.second);
     reponse(clauses, rep);
 
     return 0;

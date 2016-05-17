@@ -22,6 +22,7 @@ Travail principale sur le rendu :
 			On a remplacer la classe paris.cpp par des "parieur" a instancier et a passer en argument du solveur dpll.
 
 
+
 /**
 *
 *Rendu 3
