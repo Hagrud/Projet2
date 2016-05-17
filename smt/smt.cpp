@@ -1,5 +1,5 @@
 #include "smt.h"
 
-bool smt::valid(vector<int> result){
+bool Smt::valid(vector<bool> result){
   return true;
 }

@@ -1,8 +1,9 @@
 #include "solveur_deduction.h"
 
 Solveur_deduction::Solveur_deduction(){}
-Solveur_deduction::Solveur_deduction(Parieur p){
+Solveur_deduction::Solveur_deduction(Parieur p, Smt s){
     parieur = p;
+    smt = s;
 }
 
 vector<bool> Solveur_deduction::solve(vector<vector<int>>& clauses_, int nV){
@@ -38,13 +39,19 @@ vector<bool> Solveur_deduction::solve(vector<vector<int>>& clauses_, int nV){
             deduction(clauses, literals, paris);
         }
 
-        //Si l'instance qu'on à est valide on retourne.
-        if(check(clauses, literals))
-            return to_vector(literals);
+        //Si l'instance qu'on ? est valide on retourne.
+        if(check(clauses, literals)){
+            if(!smt.valid(to_vector(literals))){
+              addReverse(clauses, literals);
+            }
+            else{
+              return to_vector(literals);
+            }
+        }
 
         if(!parieur.parier(literals, paris)){   //On fait un paris.
 
-        	//Si on a pas pu faire de paris on retourne en arrière
+        	//Si on a pas pu faire de paris on retourne en arriere
             if(!Solveur_deduction::backtrack(clauses, literals, paris)){
                 return to_vector(literals);
             }
@@ -65,7 +72,7 @@ bool Solveur_deduction::backtrack(vector<Clause*>& clauses, vector<Literal>& lit
     Literal &lit = literals[paris.back()];
     paris.pop_back();
 
-    //On supprime toutes les déductions.
+    //On supprime toutes les d?ductions.
     for(int deduction : lit.getDeductions()){
         Literal &ded = literals[deduction];
         ded.setFixed(false);
@@ -92,3 +99,23 @@ void Solveur_deduction::deduction(vector<Clause*>& clauses, vector<Literal>& lit
 	Literal &last_paris = literals[paris.back()];
     while(dedUnitaire(clauses, literals, last_paris) || polarite_unique(clauses, literals, last_paris)){}
 }
+
+void Solveur_deduction::addReverse(vector<Clause*>& clauses, vector<Literal>& literals){
+  vector<int> n_clause;
+  n_clause.resize(0);
+  
+  for(Literal &lit : literals){
+    if(lit.getId() == 0)
+      continue;
+    
+    if(lit.getValue())
+      n_clause.push_back(-lit.getId());
+    else{
+      n_clause.push_back(lit.getId());
+    }
+  }
+  
+  clauses.push_back(new Clause(n_clause));
+  
+}
+

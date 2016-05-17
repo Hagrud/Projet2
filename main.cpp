@@ -47,10 +47,10 @@ int main(int argc, char* argv[]){
     }
 
     if(get_option("cl-interac")){
-      solveur = new Solveur_cl(*parieur);
+      solveur = new Solveur_cl(*parieur, *(new Smt()));
     }
     else{
-      solveur = new Solveur_deduction(*parieur);
+      solveur = new Solveur_deduction(*parieur, *(new Smt()));
     }
 
     vector<bool> rep = solveur->solve(clauses, parsed.second);

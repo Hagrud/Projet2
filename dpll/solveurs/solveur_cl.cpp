@@ -1,6 +1,6 @@
 #include "solveur_cl.h"
 
-Solveur_cl::Solveur_cl(Parieur p) : Solveur_deduction(p){
+Solveur_cl::Solveur_cl(Parieur p, Smt s) : Solveur_deduction(p, s){
   show_graph = true;
 }
 
@@ -11,7 +11,7 @@ void Solveur_cl::deduction(vector<Clause*>& clauses, vector<Literal>& literals, 
 
 
 bool Solveur_cl::backtrack(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris){
-	//On récupère l'uip et on apprend la nouvelle clause + affichage du graphe.
+	//On r?cup?re l'uip et on apprend la nouvelle clause + affichage du graphe.
 	Literal& uip = literals[learn_clause(clauses, literals, paris)];
 
 	//Si l'uip est 0 on ne peut pas backtrack.
@@ -33,7 +33,7 @@ bool Solveur_cl::backtrack(vector<Clause*>& clauses, vector<Literal>& literals, 
 			max = literals[abs(var)].getLevel();
 	}
 
-	//On détruit toutes les déductions et les paris fait après ce rang.
+	//On d?truit toutes les d?ductions et les paris fait apr?s ce rang.
 	while(paris.size() > (unsigned int)max+1){
 		Solveur_deduction::backtrack(clauses, literals, paris);
 	}
@@ -65,7 +65,7 @@ int Solveur_cl::learn_clause(vector<Clause*>& clauses, vector<Literal>& literals
   if(paris.size() == 1)
       return 0;
   
-  //On récupère la clause du conflit.
+  //On r?cup?re la clause du conflit.
   unsigned int conflit = get_clause_issue_id();
   
   //On construit le graphe.
@@ -73,7 +73,7 @@ int Solveur_cl::learn_clause(vector<Clause*>& clauses, vector<Literal>& literals
   create_graph(clauses, literals, literals[paris.back()].getDeductions(),
                paris, graph, clauses[conflit], 0);
 
-  //On récupère l'uip.
+  //On r?cup?re l'uip.
   int uip = get_uip(graph,literals[paris.back()].getDeductions(), paris.back());
 
   //On affiche le graphe.
@@ -209,7 +209,7 @@ void Solveur_cl::afficher_graphe(vector<Literal>& literals, vector<vector<int>>&
     return;
   }
   
-  /** Entrée utilisateur **/
+  /** Entr?e utilisateur **/
   string in;
   while(true){
     cout << "conflit : (g c t)" << endl;

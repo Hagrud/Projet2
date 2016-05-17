@@ -5,10 +5,10 @@
 
 using namespace std;
 
-class smt
+class Smt
 {
   public:
-    virtual bool valid(vector<int> result);
+    virtual bool valid(vector<bool> result);
 };
 
 #endif

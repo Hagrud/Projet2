@@ -9,13 +9,15 @@
 #include "../checker.h"
 #include "../graph.h"
 
+#include "../../smt/smt.h"
+
 /**
- * Résout l'instance de Sat à l'aide de clause learning.
+ * R?sout l'instance de Sat ? l'aide de clause learning.
  */
 class Solveur_cl : public Solveur_deduction
 {
     public:
-    	Solveur_cl(Parieur p);
+    	Solveur_cl(Parieur p, Smt s);
 		void deduction(vector<Clause*>& clauses, vector<Literal>& literals, vector<int>& paris);
 
 	protected:
@@ -32,7 +34,7 @@ class Solveur_cl : public Solveur_deduction
 		void learn(vector<Clause*>& clauses, vector<vector<int>>& graph, vector<Literal>& literals,vector<int> deduction, int uip);
 		
 		/**
-		 * Crée le graphe du conflit.
+		 * Cr?e le graphe du conflit.
 		 */
 		void create_graph(vector<Clause*>& clauses, 
                       vector<Literal>& literals,
@@ -58,7 +60,7 @@ class Solveur_cl : public Solveur_deduction
 		vector<int> vector_and(vector<int> a, vector<int> b);
 
 		/**
-		 * Crée un fichier .dot pour visualiser le graphe du conflit.
+		 * Cr?e un fichier .dot pour visualiser le graphe du conflit.
 		 */
 		void afficher_graphe(vector<Literal>& literals, vector<vector<int>>& graph, vector<int> deduction, int uip, int paris);
 
